@@ -24,6 +24,10 @@ const Wrapper = styled.section`
     align-items: center;
     padding: 20px;
 
+    @media screen and (max-width: 400px) {
+        padding: 12px;
+    }
+
     .auth-form-container {
         position: relative;
         width: 100%;
@@ -32,6 +36,12 @@ const Wrapper = styled.section`
         box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
         border-radius: 6px;
         padding: 40px;
+    }
+    @media screen and (max-width: 400px) {
+        padding: 12px;
+        .auth-form-container{
+            padding: 15px;
+        }
     }
 
     .auth-form-title {
@@ -67,6 +77,7 @@ const Wrapper = styled.section`
         border-color: var(--secondary-clr);
         outline: none;
     }
+
     .auth-form .error-display {
         font-weight: 600;
         font-size: 12px;
@@ -74,6 +85,18 @@ const Wrapper = styled.section`
         padding: 0;
         margin-top: 4px;
         color: #a90000;
+    }
+    .auth-form .input-row.password {
+        position: relative;
+    }
+    .auth-form .input-row.password .eyes {
+        position: absolute;
+        top: 30px;
+        right: 10px;
+    }
+    .input-row.password .eyes .eye {
+        font-size: 20px;
+        cursor: pointer;
     }
 
     .auth-form .btn-row {

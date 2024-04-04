@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const LoginForm = ({ setShowWhichForm }) => {
+    const [isShowPassowrd, setIsShowPassword] = useState(false);
     return (
         <div className="auth-form-container">
             <h4 className="auth-form-title">Login</h4>
@@ -14,12 +16,25 @@ const LoginForm = ({ setShowWhichForm }) => {
                     <input type="email" className="auth-input" />
                     {/* <p className="error-display">something wrong</p> */}
                 </div>
-                <div className="input-row">
-                    <label htmlFor="email" className="label">
+                <div className="input-row password">
+                    <label htmlFor="password" className="label">
                         enter password:
                     </label>
-                    <input type="email" className="auth-input" />
+                    <input
+                        type={isShowPassowrd ? "text" : "password"}
+                        className="auth-input "
+                    />
                     {/* <p className="error-display">something wrong</p> */}
+                    <div
+                        className="eyes"
+                        onClick={() => setIsShowPassword(!isShowPassowrd)}
+                    >
+                        {isShowPassowrd ? (
+                            <IoEyeOutline className="eye" />
+                        ) : (
+                            <IoEyeOffOutline className="eye" />
+                        )}
+                    </div>
                 </div>
                 <div className="btn-row">
                     <button className="auth-btn">login</button>
@@ -32,7 +47,12 @@ const LoginForm = ({ setShowWhichForm }) => {
             </div>
             <p className="account-info">
                 Don't have an account ?
-                <span className="control-form-btn">create account</span>
+                <span
+                    onClick={() => setShowWhichForm("register")}
+                    className="control-form-btn"
+                >
+                    create account
+                </span>
             </p>
 
             <div className="divider text-xs">OR</div>
