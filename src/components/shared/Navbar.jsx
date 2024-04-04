@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "../../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
+import SearchModal from "./SearchModal";
 
 const Navbar = () => {
     const navbarData = [
@@ -73,7 +74,12 @@ const Navbar = () => {
                 </div>
                 <div className="navbar-end">
                     {/* Search button */}
-                    <button className="btn btn-ghost btn-circle">
+                    <button
+                        className="btn btn-ghost btn-circle"
+                        onClick={() =>
+                            document.getElementById("SearchModal").showModal()
+                        }
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-5 w-5"
@@ -89,6 +95,8 @@ const Navbar = () => {
                             />
                         </svg>
                     </button>
+                    {/* Search Modal */}
+                    <SearchModal />
 
                     {/* Profile button */}
                     <div className="dropdown dropdown-end">
@@ -109,16 +117,14 @@ const Navbar = () => {
                             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
                         >
                             <li>
-                                <a className="justify-between">
-                                    Profile
-                                    <span className="badge">New</span>
-                                </a>
+                                <a className="justify-between">Profile</a>
                             </li>
                             <li>
                                 <a>Settings</a>
                             </li>
                             <li>
-                                <a>Logout</a>
+                                <Link to="/auth">Login</Link>
+                                {/* <a>Logout</a> */}
                             </li>
                         </ul>
                     </div>

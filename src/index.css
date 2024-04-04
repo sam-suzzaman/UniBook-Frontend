@@ -1,3 +1,17 @@
+* {
+    font-family: "Open Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-clr: #114232;
+    --secondary-clr: #87a922;
+    --accent-clr: #fcdc2a;
+    --neutral-clr: #f7f6bb;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
