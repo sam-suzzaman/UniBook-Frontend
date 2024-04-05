@@ -15,7 +15,7 @@ const CollegeCard = () => {
                 />
             </div>
             <div className="content mt-4">
-                <h3 className="c-name text-lg font-bold capitalize text-primary">
+                <h3 className="c-name text-base sm:text-lg font-bold capitalize text-primary">
                     Jatiya Kabi Kazi Nazrul Islam University
                 </h3>
                 <p className="a-date mt-2">
@@ -25,15 +25,21 @@ const CollegeCard = () => {
                     <ul className="pl-1 mt-[3px]">
                         <li className="text-[14px] mb-[3px] font-medium flex justify-start items-center">
                             <FaArrowRight className="text-[11px] mr-1" />
-                            <span className=" font-bold mr-2">
-                                Spring Term:
+                            <span className="">
+                                <span className="font-bold mr-2">
+                                    Spring Term:
+                                </span>
+                                January 15 - April 30
                             </span>
-                            January 15 - April 30
                         </li>
                         <li className="text-[14px] font-medium flex justify-start items-center">
                             <FaArrowRight className="text-[11px] mr-1" />
-                            <span className=" font-bold mr-2">Autum Term:</span>
-                            September 1 - December 15
+                            <span className="">
+                                <span className=" font-bold mr-2">
+                                    Autum Term:
+                                </span>
+                                September 1 - December 15
+                            </span>
                         </li>
                     </ul>
                 </p>
@@ -53,24 +59,30 @@ const CollegeCard = () => {
                     <ul className="pl-1 mt-[3px]">
                         <li className="text-[14px] mb-[3px] font-medium flex justify-start items-center">
                             <FaArrowRight className="text-[11px] mr-1" />
-                            <span className=" font-bold mr-2">
-                                Career Expo:
+                            <span>
+                                <span className=" font-bold mr-2">
+                                    Career Expo:
+                                </span>
+                                February 5
                             </span>
-                            February 5
                         </li>
                         <li className="text-[14px] font-medium flex justify-start items-center">
                             <FaArrowRight className="text-[11px] mr-1" />
-                            <span className=" font-bold mr-2">
-                                Diversity Week:
+                            <span>
+                                <span className=" font-bold mr-2">
+                                    Diversity Week:
+                                </span>
+                                April 10 - 14
                             </span>
-                            April 10 - 14
                         </li>
                         <li className="text-[14px] font-medium flex justify-start items-center">
                             <FaArrowRight className="text-[11px] mr-1" />
-                            <span className=" font-bold mr-2">
-                                Entrepreneurship Summit:
+                            <span>
+                                <span className=" font-bold mr-2">
+                                    Entrepreneurship Summit:
+                                </span>
+                                May 20 - 22
                             </span>
-                            May 20 - 22
                         </li>
                     </ul>
                 </p>
