@@ -1,14 +1,13 @@
 import React from "react";
+import { CollegeCard } from "../components";
 
 const HomePage = () => {
     return (
-        <div className="text-primary text-xl">
-            HomePage{" "}
-            <button class="inline-block cursor-pointer rounded-md bg-primary px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-900">
-                Button
-            </button>
-            <button className="btn-twitter">testing btn</button>
-        </div>
+        <>
+            <div className="w-full max-w-[1200px] mx-auto max-[1199px]:px-6 py-10">
+                <div className="grid grid-cols-3 gap-8 justify-between"></div>
+            </div>
+        </>
     );
 };
 
