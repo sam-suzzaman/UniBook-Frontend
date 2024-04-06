@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-const SectionTitle = () => {
+const SectionTitle = ({title}) => {
     return (
         <Wrapper>
-            <h2 className="sec-title">Campus Spotlight</h2>
+            <h2 className="sec-title">{title}</h2>
         </Wrapper>
     );
 };

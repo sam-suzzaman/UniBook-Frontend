@@ -6,3 +6,5 @@ export { default as RegisterForm } from "./shared/RegisterForm.jsx";
 export { default as LoginForm } from "./shared/LoginForm.jsx";
 export { default as CollegeCard } from "./shared/CollegeCard.jsx";
 export { default as SectionTitle } from "./shared/SectionTitle.jsx";
+export { default as GraduatesGallery } from "./GraduatesGallery/GraduatesGallery.jsx";
+export { default as ResearchCard } from "./ResearchCard/ResearchCard.jsx";

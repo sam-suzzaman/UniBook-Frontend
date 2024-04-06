@@ -3,16 +3,22 @@ import thumb from "../../assets/CampusThumb/College1.jpg";
 import { FaArrowRight } from "react-icons/fa";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { IoStarOutline } from "react-icons/io5";
 
 const CollegeCard = () => {
     return (
-        <div className="college-card shadow-md p-4 flex flex-col justify-between h-full">
-            <div className="thumb w-full">
+        <div className="college-card shadow-md p-4 flex flex-col justify-between h-full group">
+            <div className="thumb w-full relative transition-all duration-300">
                 <img
                     src={thumb}
                     alt="college thumbnail"
                     className="w-full object-cover rounded-md"
                 />
+                <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 rounded-md flex justify-center items-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <h6 className="inline-flex justify-center items-center border-[2px] border-accent px-2 py-1 rounded-sm text-accent text-base font-semibold scale-0 group-hover:scale-100 transition-all duration-300 delay-100">
+                        <span className="mr-[5px]"> 4.6</span> <IoStarOutline />
+                    </h6>
+                </div>
             </div>
             <div className="content mt-4">
                 <h3 className="c-name text-base sm:text-lg font-bold capitalize text-primary">
@@ -44,8 +50,11 @@ const CollegeCard = () => {
                     </ul>
                 </p>
                 <p className="Research mt-2">
-                    <span className="text-[16px] font-bold capitalize text-gray-900">
-                        Researches:
+                    <span className=" font-bold capitalize text-gray-900">
+                        <span className="text-[16px]">Researches:</span>
+                        <span className="bg-neutral text-[14px] ml-1 px-1 rounded-full py-[2px]">
+                            10
+                        </span>
                     </span>
                     <p className="mt-[3px] text-xs font-medium text-justify">
                         It has a rich history of research in business
