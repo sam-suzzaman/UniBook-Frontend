@@ -4,7 +4,12 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../Layout/Main";
 
 // importing pages
-import { HomePage, AboutPage, AuthenticationPage } from "../pages";
+import {
+    HomePage,
+    AboutPage,
+    AuthenticationPage,
+    SingleCollegePage,
+} from "../pages";
 
 const router = createBrowserRouter([
     {
@@ -15,6 +20,10 @@ const router = createBrowserRouter([
                 // path: "/",
                 index: true,
                 element: <HomePage />,
+            },
+            {
+                path: "/college/:id",
+                element: <SingleCollegePage />,
             },
             {
                 path: "/about",

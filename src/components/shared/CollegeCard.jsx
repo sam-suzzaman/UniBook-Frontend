@@ -107,7 +107,10 @@ const CollegeCard = () => {
                 </p>
             </div>
             <div className="detail-btn-row mt-6">
-                <Link className="w-full bg-secondary inline-flex justify-center items-center text-white font-medium text-[17px] py-1 rounded-sm hover:bg-primary transition-all duration-200 ease-in">
+                <Link
+                    to={`/college/${1}`}
+                    className="w-full bg-secondary inline-flex justify-center items-center text-white font-medium text-[17px] py-1 rounded-sm hover:bg-primary transition-all duration-200 ease-in"
+                >
                     <FaArrowUpRightFromSquare className="mr-2 text-[14px]" />
                     Details
                 </Link>

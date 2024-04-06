@@ -10,6 +10,7 @@
     --secondary-clr: #87a922;
     --accent-clr: #fcdc2a;
     --neutral-clr: #f7f6bb;
+    --gray-clr: #2e2e2e;
 }
 
 @tailwind base;
