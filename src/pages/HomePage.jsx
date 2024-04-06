@@ -1,6 +1,9 @@
 import React from "react";
+
+
 import {
     CollegeCard,
+    CollegeReviews,
     GraduatesGallery,
     ResearchCard,
     SectionTitle,
@@ -35,6 +38,12 @@ const HomePage = () => {
                     <ResearchCard />
                     <ResearchCard />
                 </div>
+            </div>
+
+            {/* Section: Reviews */}
+            <div className="w-full max-w-[1400px] mx-auto max-[1399px]:px-6 py-10">
+                <SectionTitle title="College Reviews" />
+                <CollegeReviews />
             </div>
         </>
     );

@@ -8,3 +8,5 @@ export { default as CollegeCard } from "./shared/CollegeCard.jsx";
 export { default as SectionTitle } from "./shared/SectionTitle.jsx";
 export { default as GraduatesGallery } from "./GraduatesGallery/GraduatesGallery.jsx";
 export { default as ResearchCard } from "./ResearchCard/ResearchCard.jsx";
+export { default as ReviewCard } from "./ReviewCard/ReviewCard.jsx";
+export { default as CollegeReviews } from "./CollegeReviews/CollegeReviews.jsx";
