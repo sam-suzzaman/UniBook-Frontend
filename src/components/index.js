@@ -10,3 +10,5 @@ export { default as GraduatesGallery } from "./GraduatesGallery/GraduatesGallery
 export { default as ResearchCard } from "./ResearchCard/ResearchCard.jsx";
 export { default as ReviewCard } from "./ReviewCard/ReviewCard.jsx";
 export { default as CollegeReviews } from "./CollegeReviews/CollegeReviews.jsx";
+export { default as CollegeLists } from "./CollegeLists/CollegeLists.jsx";
+export { default as ApplicationForm } from "./ApplicationForm/ApplicationForm.jsx";

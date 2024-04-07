@@ -42,7 +42,7 @@ const CollegePage = () => {
                 </div>
             </div>
 
-            {/* Section: Campus Spotlight */}
+            {/* row: Campus Spotlight */}
             <div className="w-full max-w-[1400px] mx-auto max-[1399px]:px-6 pb-16 pt-8">
                 <div className="grid grid-cols-1 min-[800px]:grid-cols-2  min-[1200px]:grid-cols-3 gap-8 justify-between">
                     <CollegeCard />
