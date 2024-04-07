@@ -7,7 +7,7 @@ import { IoStarOutline } from "react-icons/io5";
 
 const CollegeCard = () => {
     return (
-        <div className="college-card shadow-md p-4 flex flex-col justify-between h-full group">
+        <div className="college-card shadow-lg p-4 flex flex-col justify-between h-full group">
             <div className="thumb w-full relative transition-all duration-300">
                 <img
                     src={thumb}

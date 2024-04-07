@@ -9,6 +9,8 @@ import {
     AboutPage,
     AuthenticationPage,
     SingleCollegePage,
+    CollegePage,
+    AdmissionPage,
 } from "../pages";
 
 const router = createBrowserRouter([
@@ -22,8 +24,16 @@ const router = createBrowserRouter([
                 element: <HomePage />,
             },
             {
+                path: "/college",
+                element: <CollegePage />,
+            },
+            {
                 path: "/college/:id",
                 element: <SingleCollegePage />,
+            },
+            {
+                path: "/admission",
+                element: <AdmissionPage />,
             },
             {
                 path: "/about",

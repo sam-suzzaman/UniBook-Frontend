@@ -1,12 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
-const SectionTitle = ({title}) => {
-    return (
-        <Wrapper>
-            <h2 className="sec-title">{title}</h2>
-        </Wrapper>
-    );
+const SectionTitle = ({ title, clr }) => {
+    if (clr) {
+        return (
+            <Wrapper>
+                <h2 className="sec-title alt-txt-clr">{title}</h2>
+            </Wrapper>
+        );
+    } else {
+        return (
+            <Wrapper>
+                <h2 className="sec-title">{title}</h2>
+            </Wrapper>
+        );
+    }
 };
 
 const Wrapper = styled.div`
@@ -40,6 +48,16 @@ const Wrapper = styled.div`
             var(--accent-clr),
             var(--secondary-clr)
         );
+    }
+    .sec-title.alt-txt-clr {
+        background: linear-gradient(
+            90deg,
+            var(--neutral-clr),
+            var(--neutral-clr)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 `;
 export default SectionTitle;
