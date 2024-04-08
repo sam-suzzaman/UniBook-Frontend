@@ -3,8 +3,12 @@ import { useAddmissionContext } from "../../pages/AdmissionPage";
 import styled from "styled-components";
 
 const ApplicationForm = () => {
-    const { step, stepData } = useAddmissionContext();
+    const { step, setStep, stepData, setStepData } = useAddmissionContext();
 
+    const handleFormSubmission = () => {
+        setStepData({ ...stepData, isAllowStepThree: true });
+        setStep(3);
+    };
     return (
         <div className=" bg-gray-50 px-4 py-8 rounded-md">
             <div className="">
@@ -15,22 +19,21 @@ const ApplicationForm = () => {
                     Fill up form properly to complete apply
                 </p>
             </div>
-            <div className="flex flex-col gap-3 mt-12">
+            <div className="mt-8">
+                <h4 className="bg-secondary bg-opacity-15 px-2 py-2 rounded-md text-center">
+                    <span className="text-sm font-medium mr-2 text-gray-600 ">
+                        Applying to:
+                    </span>
+                    <span className="text-sm font-bold text-primary">
+                        {stepData?.selectedCollege?.name}
+                    </span>
+                </h4>
+            </div>
+            <div className="flex flex-col gap-3 mt-6">
                 <Wrapper>
                     <form className="auth-form">
                         {/* Input: candidate name */}
-                        <div className="input-row">
-                            <label htmlFor="username" className="label">
-                                Selected College:
-                            </label>
-                            <input
-                                type="text"
-                                className="auth-input"
-                                disabled
-                                defaultValue={stepData?.stepOneValue.name}
-                            />
-                            {/* <p className="error-display">something wrong</p> */}
-                        </div>
+                        <div className="input-row"></div>
                         {/* Input: candidate name */}
                         <div className="input-row">
                             <label htmlFor="username" className="label">
@@ -42,17 +45,21 @@ const ApplicationForm = () => {
                         {/* Input: subject */}
                         <div className="input-row">
                             <label htmlFor="username" className="label">
-                                select subject(todo)
+                                choose your subject:
                             </label>
                             {/* <input type="text" className="auth-input" /> */}
-                            <select name="" id="" className="auth-input">
-                                <option value="">
+                            <select
+                                name=""
+                                id=""
+                                className="auth-input capitalize"
+                            >
+                                <option value="" className="capitalize">
                                     Electrical and Electronic Engineering (EEE)
                                 </option>
-                                <option value="">
+                                <option value="" className="capitalize">
                                     Computer and science Engineering (CSE)
                                 </option>
-                                <option value="">
+                                <option value="" className="capitalize">
                                     environmental and science Engineering (ESE)
                                 </option>
                             </select>
@@ -98,8 +105,22 @@ const ApplicationForm = () => {
                             <input type="file" className="auth-input" />
                             {/* <p className="error-display">something wrong</p> */}
                         </div>
-                        <div className="btn-row">
+                        {/* <div className="btn-row">
                             <button className="auth-btn">Submit</button>
+                        </div> */}
+                        <div className="flex justify-center mt-8 gap-4">
+                            <button
+                                onClick={() => setStep(1)}
+                                className="capitalize font-semibold text-base py-1 px-6 bg-warning rounded-sm text-white transition-all duration-300 hover:bg-secondary disabled:bg-gray-300 disabled:cursor-not-allowed"
+                            >
+                                prev
+                            </button>
+                            <button
+                                onClick={handleFormSubmission}
+                                className="capitalize font-semibold text-base py-1 px-6 bg-secondary rounded-sm text-white transition-all duration-300 hover:bg-primary disabled:bg-gray-300 disabled:cursor-not-allowed"
+                            >
+                                submit
+                            </button>
                         </div>
                     </form>
                 </Wrapper>
@@ -169,7 +190,7 @@ const Wrapper = styled.div`
     }
 
     .auth-form .btn-row {
-        margin-top: 25px;
+        margin-top: 30px;
     }
     .auth-form .btn-row .auth-btn {
         outline: none;
@@ -180,7 +201,7 @@ const Wrapper = styled.div`
         font-size: 17px;
         font-weight: 400;
         letter-spacing: 1px;
-        padding: 4px 20px;
+        padding: 8px 20px;
         border-radius: 4px;
         transition: background-color 0.3s linear;
     }

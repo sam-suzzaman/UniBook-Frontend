@@ -12,3 +12,5 @@ export { default as ReviewCard } from "./ReviewCard/ReviewCard.jsx";
 export { default as CollegeReviews } from "./CollegeReviews/CollegeReviews.jsx";
 export { default as CollegeLists } from "./CollegeLists/CollegeLists.jsx";
 export { default as ApplicationForm } from "./ApplicationForm/ApplicationForm.jsx";
+export { default as ApplicationDone } from "./ApplicationDone/ApplicationDone.jsx";
+export { default as AdmissionStepBar } from "./AdmissionStepBar/AdmissionStepBar.jsx";

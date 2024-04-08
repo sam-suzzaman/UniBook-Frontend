@@ -9,7 +9,11 @@ let collegeMockData = [
 ];
 
 const CollegeLists = () => {
-    const data = useAddmissionContext();
+    const { setStep, stepData } = useAddmissionContext();
+
+    const handleNextBtn = () => {
+        setStep(2);
+    };
 
     return (
         <div className=" bg-gray-50 px-4 py-8 rounded-md">
@@ -25,6 +29,16 @@ const CollegeLists = () => {
                 {collegeMockData?.map((college) => (
                     <CollegeItem college={college} />
                 ))}
+            </div>
+
+            <div className="flex justify-center mt-8">
+                <button
+                    onClick={handleNextBtn}
+                    className="capitalize font-semibold text-base py-1 px-6 bg-secondary rounded-sm text-white transition-all duration-300 hover:bg-primary disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    disabled={!stepData?.isClgSelect}
+                >
+                    next
+                </button>
             </div>
         </div>
     );
