@@ -17,3 +17,4 @@ export { default as AdmissionStepBar } from "./AdmissionStepBar/AdmissionStepBar
 
 export { default as DashboardNavbar } from "./UI/DashboardNavbar.jsx";
 export { default as DashboardSidebar } from "./UI/DashboardSidebar.jsx";
+export { default as DashboardSecTitle } from "./UI/DashboardSecTitle.jsx";
