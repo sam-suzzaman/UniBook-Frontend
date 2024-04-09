@@ -5,9 +5,9 @@ import SearchModal from "./SearchModal";
 
 const Navbar = () => {
     const navbarData = [
-        { id: 1, title: "home", path: "/" },
-        { id: 2, title: "college", path: "/college" },
-        { id: 3, title: "admission", path: "/admission" },
+        { id: 1, title: "home", path: "." },
+        { id: 2, title: "college", path: "college" },
+        { id: 3, title: "admission", path: "admission" },
         // { id: 4, title: "login", path: "/login" },
         // { id: 5, title: "home", path: "/" },
     ];

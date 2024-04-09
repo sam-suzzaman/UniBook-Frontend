@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 // import layout
 import MainLayout from "../Layout/Main";
+import DashobardLayout from "../Layout/DashboardLayout";
 
 // importing pages
 import {
@@ -11,6 +12,8 @@ import {
     SingleCollegePage,
     CollegePage,
     AdmissionPage,
+    ProfilePage,
+    MyCollegePage,
 } from "../pages";
 
 const router = createBrowserRouter([
@@ -24,23 +27,34 @@ const router = createBrowserRouter([
                 element: <HomePage />,
             },
             {
-                path: "/college",
+                path: "college",
                 element: <CollegePage />,
             },
             {
-                path: "/college/:id",
+                path: "college/:id",
                 element: <SingleCollegePage />,
             },
             {
-                path: "/admission",
+                path: "admission",
                 element: <AdmissionPage />,
             },
             {
-                path: "/about",
+                path: "dashboard",
+                element: <DashobardLayout />,
+                children: [
+                    { index: true, element: <ProfilePage /> },
+                    {
+                        path: "my-college",
+                        element: <MyCollegePage />,
+                    },
+                ],
+            },
+            {
+                path: "about",
                 element: <AboutPage />,
             },
             {
-                path: "/auth",
+                path: "auth",
                 element: <AuthenticationPage />,
             },
         ],

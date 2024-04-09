@@ -14,3 +14,6 @@ export { default as CollegeLists } from "./CollegeLists/CollegeLists.jsx";
 export { default as ApplicationForm } from "./ApplicationForm/ApplicationForm.jsx";
 export { default as ApplicationDone } from "./ApplicationDone/ApplicationDone.jsx";
 export { default as AdmissionStepBar } from "./AdmissionStepBar/AdmissionStepBar.jsx";
+
+export { default as DashboardNavbar } from "./UI/DashboardNavbar.jsx";
+export { default as DashboardSidebar } from "./UI/DashboardSidebar.jsx";
