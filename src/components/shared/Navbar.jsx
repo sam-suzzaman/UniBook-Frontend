@@ -3,6 +3,10 @@ import logo from "../../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
 import SearchModal from "./SearchModal";
 
+import { FaRegUser } from "react-icons/fa";
+import { LuSchool } from "react-icons/lu";
+import { IoIosLogOut, IoIosLogIn } from "react-icons/io";
+
 const Navbar = () => {
     const navbarData = [
         { id: 1, title: "home", path: "." },
@@ -114,17 +118,43 @@ const Navbar = () => {
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-sm w-52"
                         >
-                            <li>
-                                <a className="justify-between">Profile</a>
+                            <li className="mb-1">
+                                <NavLink
+                                    to="/dashboard"
+                                    className="rounded-sm bg-black bg-opacity-[0.024]"
+                                >
+                                    <FaRegUser className=" mr-[2px]" />
+                                    Profile
+                                </NavLink>
                             </li>
-                            <li>
-                                <a>Settings</a>
+                            <li className="mb-1">
+                                <NavLink
+                                    to="/dashboard/my-college"
+                                    className="rounded-sm bg-black bg-opacity-[0.024]"
+                                >
+                                    <LuSchool className=" mr-[2px]" />
+                                    My College
+                                </NavLink>
                             </li>
-                            <li>
-                                <Link to="/auth">Login</Link>
-                                {/* <a>Logout</a> */}
+                            <li className="mb-1">
+                                <NavLink
+                                    to="/auth"
+                                    className="rounded-sm bg-black bg-opacity-[0.024]"
+                                >
+                                    <IoIosLogIn className=" mr-[2px]" />
+                                    Login
+                                </NavLink>
+                            </li>
+                            <li className="">
+                                <NavLink
+                                    to="/auth"
+                                    className="rounded-sm bg-black bg-opacity-[0.024] text-red-600"
+                                >
+                                    <IoIosLogOut className=" mr-[2px]" />
+                                    Logout
+                                </NavLink>
                             </li>
                         </ul>
                     </div>

@@ -5,9 +5,10 @@ import { Footer, Navbar } from "../components";
 const MainLayout = () => {
     const location = useLocation();
     const isAuthRoute = location.pathname === "/auth";
+    const isResetRoute = location.pathname === "/reset";
     const isDashboardRoute = location.pathname.includes("/dashboard");
 
-    if (isAuthRoute || isDashboardRoute) {
+    if (isAuthRoute || isDashboardRoute || isResetRoute) {
         return (
             <div>
                 <Outlet />

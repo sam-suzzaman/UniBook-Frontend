@@ -14,6 +14,7 @@ import {
     AdmissionPage,
     ProfilePage,
     MyCollegePage,
+    PasswordResetPage,
 } from "../pages";
 
 const router = createBrowserRouter([
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
             {
                 path: "auth",
                 element: <AuthenticationPage />,
+            },
+            {
+                path: "reset",
+                element: <PasswordResetPage />,
             },
         ],
     },
