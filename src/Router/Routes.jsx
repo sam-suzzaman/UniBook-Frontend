@@ -15,12 +15,14 @@ import {
     ProfilePage,
     MyCollegePage,
     PasswordResetPage,
+    ErrorPage,
 } from "../pages";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <MainLayout />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 // path: "/",

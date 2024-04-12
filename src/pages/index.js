@@ -8,3 +8,4 @@ export { default as AdmissionPage } from "./AdmissionPage.jsx";
 export { default as ProfilePage } from "./ProfilePage.jsx";
 export { default as MyCollegePage } from "./MyCollegePage.jsx";
 export { default as PasswordResetPage } from "./PasswordResetPage.jsx";
+export { default as ErrorPage } from "./ErrorPage.jsx";
