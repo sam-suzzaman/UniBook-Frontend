@@ -1,6 +1,5 @@
 import React from "react";
 
-
 import {
     CollegeCard,
     CollegeReviews,
@@ -8,17 +7,28 @@ import {
     ResearchCard,
     SectionTitle,
 } from "../components";
+import { useGetAllCollegeQuery } from "../redux/features/api/baseApi";
 
 const HomePage = () => {
+    const {
+        data: colleges,
+        isLoading,
+        isError,
+        error,
+    } = useGetAllCollegeQuery();
+
     return (
         <>
             {/* Section: Campus Spotlight */}
             <div className="w-full max-w-[1400px] mx-auto max-[1399px]:px-6 py-10">
                 <SectionTitle title="Campus Spotlight" />
                 <div className="grid grid-cols-1 min-[800px]:grid-cols-2  min-[1200px]:grid-cols-3 gap-8 justify-between">
+                    {colleges?.result?.map((college) => {
+                        return <CollegeCard />;
+                    })}
+                    {/* <CollegeCard />
                     <CollegeCard />
-                    <CollegeCard />
-                    <CollegeCard />
+                    <CollegeCard /> */}
                 </div>
             </div>
 
