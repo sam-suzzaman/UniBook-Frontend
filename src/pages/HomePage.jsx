@@ -7,7 +7,10 @@ import {
     ResearchCard,
     SectionTitle,
 } from "../components";
-import { useGetAllCollegeQuery } from "../redux/features/api/baseApi";
+import {
+    useGetAllCollegeQuery,
+    useGetGraduatesQuery,
+} from "../redux/features/api/baseApi";
 
 const HomePage = () => {
     const {
@@ -16,6 +19,12 @@ const HomePage = () => {
         isError,
         error,
     } = useGetAllCollegeQuery();
+    const {
+        data: graduates,
+        isLoading: gLoading,
+        isError: gIsError,
+        error: gError,
+    } = useGetGraduatesQuery();
 
     return (
         <>
@@ -36,7 +45,7 @@ const HomePage = () => {
             <div className="w-full max-w-[1400px] mx-auto max-[1399px]:px-6 py-10">
                 <SectionTitle title="Our Graduates" />
                 <div>
-                    <GraduatesGallery />
+                    <GraduatesGallery graduates={graduates?.result} />
                 </div>
             </div>
 

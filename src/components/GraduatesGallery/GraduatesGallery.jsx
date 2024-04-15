@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const GraduatesGallery = () => {
+const GraduatesGallery = ({ graduates }) => {
     return (
         <Wrapper>
             <div class="gallery-wrapper">
-                <div className="thumb-card relative group">
+                {/* <div className="thumb-card relative group">
                     <img
                         src="https://images.unsplash.com/photo-1541845157-a6d2d100c931?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1350&amp;q=80"
                         alt=""
@@ -116,7 +116,36 @@ const GraduatesGallery = () => {
                             </h6>
                         </div>
                     </div>
-                </div>
+                </div> */}
+                {graduates?.map((graduate, i) => {
+                    return (
+                        <div
+                            className={`thumb-card relative group ${
+                                i == 2 && "tall"
+                            } ${(i == 3 || i == 4) && "wide"}`}
+                        >
+                            <img src={graduate.thumb} alt="" className="object-cover" />
+                            <div className="gallery-overlay absolute top-0 right-0 bottom-0 left-0 rounded-[5px] flex flex-col justify-end h-full pb-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                <div className="mb-[-20px] group-hover:mb-0 transition-all duration-300 delay-10">
+                                    <h4 className="text-[15px] font-bold text-accent text-center">
+                                        {graduate.collegeName}
+                                    </h4>
+                                    <h6 className="text-[13px] font-semibold text-center mt-1 text-white">
+                                        <span className="">
+                                            {graduate.batch} batch
+                                        </span>
+                                    </h6>
+                                    {/* <h6 className="text-[13px] font-semibold text-center mt-1 text-white">
+                                        Session:{" "}
+                                        <span className="">
+                                            {graduate.batch}
+                                        </span>
+                                    </h6> */}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
         </Wrapper>
     );

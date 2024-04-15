@@ -12,8 +12,22 @@ const baseApi = createApi({
         getAllCollege: builder.query({
             query: () => "/college",
         }),
+        getGraduates: builder.query({
+            query: () => "/college/graduates",
+        }),
+        registerUser: builder.mutation({
+            query: (user) => ({
+                url: "/auth/register",
+                method: "POST",
+                body: user,
+            }),
+        }),
     }),
 });
 
-export const { useGetAllCollegeQuery } = baseApi;
+export const {
+    useGetAllCollegeQuery,
+    useGetGraduatesQuery,
+    useRegisterUserMutation,
+} = baseApi;
 export default baseApi;

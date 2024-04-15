@@ -2,9 +2,18 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { GoogleAuthProvider } from "firebase/auth";
+import { registerUser } from "../../redux/features/UserSlice";
 
 const LoginForm = ({ setShowWhichForm }) => {
     const [isShowPassowrd, setIsShowPassword] = useState(false);
+    const dispatch = useDispatch();
+
+    const handleGoogleLogin = () => {
+        const provider = new GoogleAuthProvider();
+        dispatch(registerUser(provider));
+    };
     return (
         <div className="auth-form-container">
             <h4 className="auth-form-title">Login</h4>
@@ -59,7 +68,7 @@ const LoginForm = ({ setShowWhichForm }) => {
 
             {/* Social login */}
             <div className="social-auth-container">
-                <button className="auth-btn">
+                <button className="auth-btn" onClick={handleGoogleLogin}>
                     <FaGoogle />
                 </button>
                 <button className="auth-btn">

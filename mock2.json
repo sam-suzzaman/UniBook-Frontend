@@ -3,5 +3,57 @@
     "commentDate": "",
     "rating": "",
     "toWhichCollege": "",
-    "comment": ""
+    "comment": "",
+
+    "graduates": [
+        {
+            "id": 1,
+            "collegeName": "Stanford University",
+            "thumb": "https://i.ibb.co/kx6B0PN/g7.jpg",
+            "batch": "32th",
+            "session": "1978-1979"
+        },
+        {
+            "id": 2,
+            "collegeName": "Massachusetts Institute of Technology (MIT)",
+            "thumb": "https://i.ibb.co/kJdV6XW/g6.jpg",
+            "batch": "22th",
+            "session": "1988-1989"
+        },
+        {
+            "id": 3,
+            "collegeName": "Harvard University",
+            "thumb": "https://i.ibb.co/6YyXvDx/g4.jpg",
+            "batch": "29th",
+            "session": "1990-1991"
+        },
+        {
+            "id": 4,
+            "collegeName": "University of Oxford",
+            "thumb": "https://i.ibb.co/wNGYK9Z/g3.jpg",
+            "batch": "12th",
+            "session": "1998-1999"
+        },
+        {
+            "id": 5,
+            "collegeName": "University of Cambridge",
+            "thumb": "https://i.ibb.co/zFqxrTT/g2.jpg",
+            "batch": "58th",
+            "session": "1968-1969"
+        },
+        {
+            "id": 6,
+            "collegeName": "University of California, Berkeley",
+            "thumb": "https://i.ibb.co/TLC5Mw5/g1.jpg",
+            "batch": "89th",
+            "session": "1994-1995"
+        },
+        {
+            "id": 7,
+            "collegeName": "Yale University",
+            "thumb": "https://i.ibb.co/wNGYK9Z/g3.jpg",
+            "batch": "13th",
+            "session": "1988-1989"
+        }
+    ]
 }

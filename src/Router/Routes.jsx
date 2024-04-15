@@ -17,6 +17,7 @@ import {
     PasswordResetPage,
     ErrorPage,
 } from "../pages";
+import PrivateRoute from "../Layout/PrivateRoute";
 
 const router = createBrowserRouter([
     {
@@ -27,7 +28,11 @@ const router = createBrowserRouter([
             {
                 // path: "/",
                 index: true,
-                element: <HomePage />,
+                element: (
+                    <PrivateRoute>
+                        <HomePage />
+                    </PrivateRoute>
+                ),
             },
             {
                 path: "college",
