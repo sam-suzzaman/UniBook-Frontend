@@ -1,12 +1,16 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { useRegisterUserMutation } from "../../redux/features/api/baseApi";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, toggleLoading } from "../../redux/features/UserSlice";
 
 const RegisterForm = ({ setShowWhichForm }) => {
     const [isShowPassowrd, setIsShowPassword] = useState(false);
+    const { email } = useSelector((state) => state.userSlice);
+    const dispatch = useDispatch();
     const {
         register,
         handleSubmit,
@@ -16,6 +20,10 @@ const RegisterForm = ({ setShowWhichForm }) => {
     } = useForm();
     const [registerUser, { data: user, isLoading, isError, error }] =
         useRegisterUserMutation();
+
+    let navigate = useNavigate();
+    let location = useLocation();
+    let from = location?.state?.from?.pathname || "/";
 
     const onSubmit = async (data) => {
         const { username, email, password, confirmPassword } = data;
@@ -28,19 +36,34 @@ const RegisterForm = ({ setShowWhichForm }) => {
             });
         } else {
             try {
-                await registerUser({ username, email, password });
+                const res = await registerUser({ username, email, password });
                 Swal.fire({
                     icon: "success",
                     title: "Done...",
                     text: "Successfully registered",
                 });
-                console.log(user);
+                console.log(res);
+                dispatch(
+                    setUser({
+                        username: res?.data?.result?.username,
+                        email: res?.data?.result?.email,
+                        isLoading: false,
+                    })
+                );
                 // history.push("/");
             } catch (error) {
                 console.error("Registration error:", error);
             }
         }
     };
+
+    useEffect(() => {
+        // console.log(from);
+        if (email) {
+            navigate(from, { replace: true });
+        }
+    }, [navigate, email]);
+
     return (
         <div className="auth-form-container">
             <h4 className="auth-form-title">Create Account</h4>

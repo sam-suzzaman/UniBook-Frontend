@@ -6,8 +6,15 @@ import SearchModal from "./SearchModal";
 import { FaRegUser } from "react-icons/fa";
 import { LuSchool } from "react-icons/lu";
 import { IoIosLogOut, IoIosLogIn } from "react-icons/io";
+import { signOut } from "firebase/auth";
+import firebaseAuth from "../../firebase-init";
+import { useDispatch, useSelector } from "react-redux";
+import { socialLogOut } from "../../redux/features/UserSlice";
 
 const Navbar = () => {
+    const dispatch = useDispatch();
+    const { username, email } = useSelector((state) => state.userSlice);
+
     const navbarData = [
         { id: 1, title: "home", path: "." },
         { id: 2, title: "college", path: "college" },
@@ -25,6 +32,11 @@ const Navbar = () => {
             </NavLink>
         </li>
     ));
+
+    const handleSocialLogout = () => {
+        signOut(firebaseAuth);
+        dispatch(socialLogOut());
+    };
     return (
         <div className="bg-base-100 shadow-sm border-b-2 border-gray-100 flex justify-center items-center">
             <div className="navbar w-full max-w-[1200px]">
@@ -120,10 +132,15 @@ const Navbar = () => {
                             tabIndex={0}
                             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-sm w-52"
                         >
+                            <div className=" mb-3 mt-1">
+                                <h6 className="text-center text-sm font-bold text-primary overflow-hidden text-ellipsis">
+                                    - {username || "unknown"} -
+                                </h6>
+                            </div>
                             <li className="mb-1">
                                 <NavLink
                                     to="/dashboard"
-                                    className="rounded-sm bg-black bg-opacity-[0.024]"
+                                    className="rounded-sm bg-black bg-opacity-[0.024] "
                                 >
                                     <FaRegUser className=" mr-[2px]" />
                                     Profile
@@ -138,24 +155,28 @@ const Navbar = () => {
                                     My College
                                 </NavLink>
                             </li>
-                            <li className="mb-1">
-                                <NavLink
-                                    to="/auth"
-                                    className="rounded-sm bg-black bg-opacity-[0.024]"
-                                >
-                                    <IoIosLogIn className=" mr-[2px]" />
-                                    Login
-                                </NavLink>
-                            </li>
-                            <li className="">
-                                <NavLink
-                                    to="/auth"
-                                    className="rounded-sm bg-black bg-opacity-[0.024] text-red-600"
-                                >
-                                    <IoIosLogOut className=" mr-[2px]" />
-                                    Logout
-                                </NavLink>
-                            </li>
+                            {!email && (
+                                <li className="mb-1">
+                                    <NavLink
+                                        to="/auth"
+                                        className="rounded-sm bg-black bg-opacity-[0.024]"
+                                    >
+                                        <IoIosLogIn className=" mr-[2px]" />
+                                        Login
+                                    </NavLink>
+                                </li>
+                            )}
+                            {email && (
+                                <li className="" onClick={handleSocialLogout}>
+                                    <NavLink
+                                        to="/auth"
+                                        className="rounded-sm bg-black bg-opacity-[0.024] text-red-600"
+                                    >
+                                        <IoIosLogOut className=" mr-[2px]" />
+                                        Logout
+                                    </NavLink>
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>

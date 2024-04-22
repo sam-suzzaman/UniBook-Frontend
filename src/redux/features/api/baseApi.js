@@ -22,6 +22,13 @@ const baseApi = createApi({
                 body: user,
             }),
         }),
+        loginUser: builder.mutation({
+            query: (user) => ({
+                url: "/auth/login",
+                method: "POST",
+                body: user,
+            }),
+        }),
     }),
 });
 
@@ -29,5 +36,6 @@ export const {
     useGetAllCollegeQuery,
     useGetGraduatesQuery,
     useRegisterUserMutation,
+    useLoginUserMutation,
 } = baseApi;
 export default baseApi;

@@ -6,7 +6,8 @@ import firebaseAuth from "../firebase-init";
 import { setUser, toggleLoading } from "../redux/features/UserSlice";
 
 const PrivateRoute = ({ children }) => {
-    const { pathname } = useLocation();
+    const location = useLocation();
+
     const { isLoading, email } = useSelector((state) => state.userSlice);
     const dispatch = useDispatch();
 
@@ -25,12 +26,16 @@ const PrivateRoute = ({ children }) => {
             }
         });
     }, []);
+
     if (isLoading) {
         return <h1>loading....</h1>;
     }
+
     if (!isLoading && !email) {
-        return <Navigate to="/auth" state={{ path: pathname }} />;
+        return <Navigate to="/auth" state={{ from: location }} replace />;
+        // return <Navigate to="/auth" state={{ path: pathname }} />;
     }
+
     return children;
 };
 

@@ -28,11 +28,7 @@ const router = createBrowserRouter([
             {
                 // path: "/",
                 index: true,
-                element: (
-                    <PrivateRoute>
-                        <HomePage />
-                    </PrivateRoute>
-                ),
+                element: <HomePage />,
             },
             {
                 path: "college",
@@ -40,7 +36,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "college/:id",
-                element: <SingleCollegePage />,
+                element: (
+                    <PrivateRoute>
+                        <SingleCollegePage />
+                    </PrivateRoute>
+                ),
             },
             {
                 path: "admission",
@@ -48,7 +48,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "dashboard",
-                element: <DashobardLayout />,
+                element: (
+                    <PrivateRoute>
+                        <DashobardLayout />
+                    </PrivateRoute>
+                ),
                 children: [
                     { index: true, element: <ProfilePage /> },
                     {
