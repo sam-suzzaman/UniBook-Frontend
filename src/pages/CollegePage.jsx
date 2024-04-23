@@ -2,11 +2,27 @@ import React from "react";
 import styled from "styled-components";
 import { CollegeCard, SectionTitle } from "../components";
 import { useLocation, Link } from "react-router-dom";
+import { useGetAllCollegeQuery } from "../redux/features/api/baseApi";
+import Loading from "../components/shared/Loading";
 
 const CollegePage = () => {
     const location = useLocation();
     const pathnames = location.pathname.split("/").filter((x) => x);
 
+    const {
+        data: colleges,
+        isLoading,
+        isError,
+        error,
+    } = useGetAllCollegeQuery();
+
+    if (isLoading) {
+        return (
+            <div className="h-screen flex justify-center items-center">
+                <Loading />
+            </div>
+        );
+    }
     return (
         <Wrapper>
             {/* row: feature-banner */}
@@ -45,12 +61,9 @@ const CollegePage = () => {
             {/* row: Campus Spotlight */}
             <div className="w-full max-w-[1400px] mx-auto max-[1399px]:px-6 pb-16 pt-8">
                 <div className="grid grid-cols-1 min-[800px]:grid-cols-2  min-[1200px]:grid-cols-3 gap-8 justify-between">
-                    <CollegeCard />
-                    <CollegeCard />
-                    <CollegeCard />
-                    <CollegeCard />
-                    <CollegeCard />
-                    <CollegeCard />
+                    {colleges?.result?.map((college) => (
+                        <CollegeCard college={college} key={college._id} />
+                    ))}
                 </div>
             </div>
         </Wrapper>

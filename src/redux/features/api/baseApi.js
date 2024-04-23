@@ -12,6 +12,12 @@ const baseApi = createApi({
         getAllCollege: builder.query({
             query: () => "/college",
         }),
+        getLimitedCollege: builder.query({
+            query: () => "/college?limit=3",
+        }),
+        getSingleCollege: builder.query({
+            query: (id) => `/college/${id}`,
+        }),
         getGraduates: builder.query({
             query: () => "/college/graduates",
         }),
@@ -34,6 +40,8 @@ const baseApi = createApi({
 
 export const {
     useGetAllCollegeQuery,
+    useGetLimitedCollegeQuery,
+    useGetSingleCollegeQuery,
     useGetGraduatesQuery,
     useRegisterUserMutation,
     useLoginUserMutation,
