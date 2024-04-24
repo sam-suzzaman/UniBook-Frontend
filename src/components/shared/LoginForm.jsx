@@ -4,18 +4,17 @@ import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { GoogleAuthProvider } from "firebase/auth";
-import { registerUser, setUser } from "../../redux/features/UserSlice";
+import {
+    googleLoginThunk,
+    userLoginThunk,
+} from "../../redux/features/UserSlice";
 import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
-import { useLoginUserMutation } from "../../redux/features/api/baseApi";
 
 const LoginForm = ({ setShowWhichForm }) => {
     const [isShowPassowrd, setIsShowPassword] = useState(false);
 
     const dispatch = useDispatch();
     const { email } = useSelector((state) => state.userSlice);
-    const [loginUser, { data: user, isLoading, isError, error }] =
-        useLoginUserMutation();
 
     let navigate = useNavigate();
     let location = useLocation();
@@ -24,42 +23,22 @@ const LoginForm = ({ setShowWhichForm }) => {
     const {
         register,
         handleSubmit,
-        watch,
         reset,
         formState: { errors },
     } = useForm();
 
     const handleGoogleLogin = () => {
         const provider = new GoogleAuthProvider();
-        dispatch(registerUser(provider));
+        dispatch(googleLoginThunk(provider));
     };
 
     const handleEmailPassLogin = async (data) => {
         const { email, password } = data;
-
-        try {
-            const res = await loginUser({ email, password });
-            Swal.fire({
-                icon: "success",
-                title: "Done...",
-                text: "Successfully login",
-            });
-            console.log(res);
-            dispatch(
-                setUser({
-                    username: res?.data?.result?.username,
-                    email: res?.data?.result?.email,
-                    isLoading: false,
-                })
-            );
-            // history.push("/");
-        } catch (error) {
-            console.error("login error:", error);
-        }
+        const userObject = { email, password };
+        dispatch(userLoginThunk({ userObject, reset }));
     };
 
     useEffect(() => {
-        // console.log(from);
         if (email) {
             navigate(from, { replace: true });
         }

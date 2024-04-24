@@ -1,20 +1,29 @@
 import React from "react";
 import CollegeItem from "./CollegeItem";
 import { useAddmissionContext } from "../../pages/AdmissionPage";
-
-let collegeMockData = [
-    { _id: "1", name: "Dhaka University" },
-    { _id: "2", name: "Rajsahi University" },
-    { _id: "3", name: "Jaitya Kabi Kazi Nazrul Islam University" },
-];
+import { useGetAllCollegeQuery } from "../../redux/features/api/baseApi";
+import Loading from "../shared/Loading";
 
 const CollegeLists = () => {
+    const {
+        data: colleges,
+        isLoading,
+        isError,
+        error,
+    } = useGetAllCollegeQuery();
     const { setStep, stepData } = useAddmissionContext();
 
     const handleNextBtn = () => {
         setStep(2);
     };
 
+    if (isLoading) {
+        return (
+            <div className="flex h-screen justify-center items-center">
+                <Loading />
+            </div>
+        );
+    }
     return (
         <div className=" bg-gray-50 px-4 py-8 rounded-md">
             <div className="">
@@ -26,8 +35,8 @@ const CollegeLists = () => {
                 </p>
             </div>
             <div className="flex flex-col gap-3 mt-12">
-                {collegeMockData?.map((college) => (
-                    <CollegeItem college={college} />
+                {colleges?.result?.map((college) => (
+                    <CollegeItem college={college} key={college?._id} />
                 ))}
             </div>
 

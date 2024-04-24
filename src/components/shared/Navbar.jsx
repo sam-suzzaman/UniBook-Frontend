@@ -9,7 +9,7 @@ import { IoIosLogOut, IoIosLogIn } from "react-icons/io";
 import { signOut } from "firebase/auth";
 import firebaseAuth from "../../firebase-init";
 import { useDispatch, useSelector } from "react-redux";
-import { socialLogOut } from "../../redux/features/UserSlice";
+import { userLogout } from "../../redux/features/UserSlice";
 
 const Navbar = () => {
     const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const Navbar = () => {
 
     const handleSocialLogout = () => {
         signOut(firebaseAuth);
-        dispatch(socialLogOut());
+        dispatch(userLogout());
     };
     return (
         <div className="bg-base-100 shadow-sm border-b-2 border-gray-100 flex justify-center items-center">

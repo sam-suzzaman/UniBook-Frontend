@@ -18,6 +18,7 @@ import {
     ErrorPage,
 } from "../pages";
 import PrivateRoute from "../Layout/PrivateRoute";
+import Demo from "../pages/Demo";
 
 const router = createBrowserRouter([
     {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
             {
                 path: "admission",
                 element: <AdmissionPage />,
+            },
+            {
+                path: "demo",
+                element: <Demo />,
             },
             {
                 path: "dashboard",

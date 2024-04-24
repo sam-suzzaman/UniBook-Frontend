@@ -8,7 +8,8 @@ const CollegeItem = ({ college }) => {
     const handleCollegeSelection = (college) => {
         const updateData = {
             ...stepData,
-            selectedCollege: college,
+            selectedCollegeName: college.collegeName,
+            selectedCollegeID: college._id,
             isClgSelect: true,
         };
         setStepData(updateData);
@@ -19,14 +20,14 @@ const CollegeItem = ({ college }) => {
             key={college._id}
             className="flex justify-start items-center bg-neutral bg-opacity-40 py-2 px-4 rounded-[5px] text-black hover:bg-opacity-75 transition-all duration-300 cursor-pointer"
         >
-            {stepData?.selectedCollege?._id === college?._id ? (
+            {stepData?.selectedCollegeID === college?._id ? (
                 <FaCircle className="text-[12px] font-bold mr-2" />
             ) : (
                 <FaRegCircle className="text-[12px] font-bold mr-2" />
             )}
 
             <h3 className="font-medium text-[15px] capitalize">
-                {college?.name}
+                {college?.collegeName}
             </h3>
         </div>
     );

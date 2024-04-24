@@ -1,14 +1,73 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAddmissionContext } from "../../pages/AdmissionPage";
 import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useAdmistUserMutation } from "../../redux/features/api/baseApi";
 
 const ApplicationForm = () => {
-    const { step, setStep, stepData, setStepData } = useAddmissionContext();
+    const { userID } = useSelector((state) => state.userSlice);
+    //  const { email } = useSelector((state) => state.userSlice);
+    const [admitUser, { data: admission, isLoading, isError, error }] =
+        useAdmistUserMutation();
 
-    const handleFormSubmission = () => {
-        setStepData({ ...stepData, isAllowStepThree: true });
-        setStep(3);
+    const { step, setStep, stepData, setStepData } = useAddmissionContext();
+    const {
+        register,
+        handleSubmit,
+        watch,
+        reset,
+        formState: { errors },
+    } = useForm();
+
+    const candidateNameWatch = watch("candidateName");
+    const subjectWatch = watch("subject");
+    const emailWatch = watch("email");
+    const mobileWatch = watch("mobile");
+    const dobWatch = watch("dob");
+    const addressWatch = watch("address");
+
+    // updating state values
+    useEffect(() => {
+        setStepData({
+            ...stepData,
+            candidateName: candidateNameWatch,
+            selectedSubject: subjectWatch,
+            candidateEmail: emailWatch,
+            candidateMobile: mobileWatch,
+            candidateDOB: dobWatch,
+            candidateAddress: addressWatch,
+        });
+    }, [
+        candidateNameWatch,
+        subjectWatch,
+        emailWatch,
+        mobileWatch,
+        dobWatch,
+        addressWatch,
+    ]);
+
+    const handleFormSubmission = async (data) => {
+        const { candidateName, address, dob, email, mobile, subject } = data;
+        const applicationData = {
+            collegeID: stepData.selectedCollegeID,
+            userID,
+            candidateName,
+            candidateEmail: email,
+            selectedSubject: subject,
+            candidatePhoneNumber: mobile,
+            candidateDOB: dob,
+            candidateAddress: address,
+        };
+        console.log(applicationData);
+        try {
+            const res = await admitUser(applicationData);
+            console.log(res);
+        } catch (error) {
+            console.log(error);
+        }
     };
+
     return (
         <div className=" bg-gray-50 px-4 py-8 rounded-md">
             <div className="">
@@ -25,26 +84,43 @@ const ApplicationForm = () => {
                         Applying to:
                     </span>
                     <span className="text-sm font-bold text-primary">
-                        {stepData?.selectedCollege?.name}
+                        {stepData?.selectedCollegeName}
                     </span>
                 </h4>
             </div>
             <div className="flex flex-col gap-3 mt-6">
                 <Wrapper>
-                    <form className="auth-form">
-                        {/* Input: candidate name */}
-                        <div className="input-row"></div>
+                    <form
+                        className="auth-form"
+                        onSubmit={handleSubmit(handleFormSubmission)}
+                        autoComplete="off"
+                    >
                         {/* Input: candidate name */}
                         <div className="input-row">
-                            <label htmlFor="username" className="label">
+                            <label htmlFor="candidateName" className="label">
                                 candidate's name:
                             </label>
-                            <input type="text" className="auth-input" />
+                            <input
+                                type="text"
+                                className="auth-input"
+                                defaultValue={stepData?.candidateName}
+                                {...register("candidateName", {
+                                    required: {
+                                        value: true,
+                                        message: "Candidate name is required",
+                                    },
+                                })}
+                            />
+                            {errors?.candidateName && (
+                                <p className="error-display">
+                                    {errors?.candidateName?.message}
+                                </p>
+                            )}
                             {/* <p className="error-display">something wrong</p> */}
                         </div>
                         {/* Input: subject */}
                         <div className="input-row">
-                            <label htmlFor="username" className="label">
+                            <label htmlFor="subject" className="label">
                                 choose your subject:
                             </label>
                             {/* <input type="text" className="auth-input" /> */}
@@ -52,17 +128,40 @@ const ApplicationForm = () => {
                                 name=""
                                 id=""
                                 className="auth-input capitalize"
+                                defaultValue={stepData?.selectedSubject}
+                                {...register("subject", {
+                                    required: {
+                                        value: true,
+                                        message: "Select one subject",
+                                    },
+                                    validate: {
+                                        valueType: (value) => {
+                                            return (
+                                                value !== "none" ||
+                                                "Select a subject"
+                                            );
+                                        },
+                                    },
+                                })}
                             >
-                                <option value="" className="capitalize">
+                                <option selected disabled value="none">
+                                    Subject Name
+                                </option>
+                                <option value="eee" className="capitalize">
                                     Electrical and Electronic Engineering (EEE)
                                 </option>
-                                <option value="" className="capitalize">
+                                <option value="cse" className="capitalize">
                                     Computer and science Engineering (CSE)
                                 </option>
-                                <option value="" className="capitalize">
+                                <option value="ese" className="capitalize">
                                     environmental and science Engineering (ESE)
                                 </option>
                             </select>
+                            {errors?.subject && (
+                                <p className="error-display">
+                                    {errors?.subject?.message}
+                                </p>
+                            )}
                             {/* <p className="error-display">something wrong</p> */}
                         </div>
                         {/* Input: Email */}
@@ -70,7 +169,26 @@ const ApplicationForm = () => {
                             <label htmlFor="email" className="label">
                                 Candidate's email:
                             </label>
-                            <input type="email" className="auth-input" />
+                            <input
+                                type="email"
+                                className="auth-input"
+                                defaultValue={stepData?.candidateEmail}
+                                {...register("email", {
+                                    required: {
+                                        value: true,
+                                        message: "an email is required",
+                                    },
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
+                                        message: "a valid email required",
+                                    },
+                                })}
+                            />
+                            {errors?.email && (
+                                <p className="error-display">
+                                    {errors?.email?.message}
+                                </p>
+                            )}
                             {/* <p className="error-display">something wrong</p> */}
                         </div>
                         {/* Input: phone */}
@@ -78,7 +196,22 @@ const ApplicationForm = () => {
                             <label htmlFor="phone" className="label">
                                 Candidate's moible number:
                             </label>
-                            <input type="tel" className="auth-input" />
+                            <input
+                                type="tel"
+                                className="auth-input"
+                                defaultValue={stepData?.candidateMobile}
+                                {...register("mobile", {
+                                    required: {
+                                        value: true,
+                                        message: "A contact number required",
+                                    },
+                                })}
+                            />
+                            {errors?.mobile && (
+                                <p className="error-display">
+                                    {errors?.mobile?.message}
+                                </p>
+                            )}
                             {/* <p className="error-display">something wrong</p> */}
                         </div>
                         {/* Input: DOB */}
@@ -86,7 +219,22 @@ const ApplicationForm = () => {
                             <label htmlFor="dob" className="label">
                                 Candidate's Date of birth:(todo)
                             </label>
-                            <input type="date" className="auth-input" />
+                            <input
+                                type="date"
+                                className="auth-input"
+                                defaultValue={stepData?.candidateDOB}
+                                {...register("dob", {
+                                    required: {
+                                        value: true,
+                                        message: "Candidate DOB required",
+                                    },
+                                })}
+                            />
+                            {errors?.dob && (
+                                <p className="error-display">
+                                    {errors?.dob?.message}
+                                </p>
+                            )}
                             {/* <p className="error-display">something wrong</p> */}
                         </div>
                         {/* Input: address */}
@@ -94,7 +242,22 @@ const ApplicationForm = () => {
                             <label htmlFor="address" className="label">
                                 Candidate's Address:
                             </label>
-                            <input type="text" className="auth-input" />
+                            <input
+                                type="text"
+                                className="auth-input"
+                                defaultValue={stepData?.candidateAddress}
+                                {...register("address", {
+                                    required: {
+                                        value: true,
+                                        message: "Candidate address required",
+                                    },
+                                })}
+                            />
+                            {errors?.address && (
+                                <p className="error-display">
+                                    {errors?.address?.message}
+                                </p>
+                            )}
                             {/* <p className="error-display">something wrong</p> */}
                         </div>
                         {/* Input: photo */}
@@ -102,7 +265,21 @@ const ApplicationForm = () => {
                             <label htmlFor="avatar" className="label">
                                 Candidate's Photo:
                             </label>
-                            <input type="file" className="auth-input" />
+                            <input
+                                type="file"
+                                className="auth-input"
+                                {...register("photo", {
+                                    required: {
+                                        value: true,
+                                        message: "Candidate photo required",
+                                    },
+                                })}
+                            />
+                            {errors?.photo && (
+                                <p className="error-display">
+                                    {errors?.photo?.message}
+                                </p>
+                            )}
                             {/* <p className="error-display">something wrong</p> */}
                         </div>
                         {/* <div className="btn-row">
@@ -116,7 +293,7 @@ const ApplicationForm = () => {
                                 prev
                             </button>
                             <button
-                                onClick={handleFormSubmission}
+                                type="submit"
                                 className="capitalize font-semibold text-base py-1 px-6 bg-secondary rounded-sm text-white transition-all duration-300 hover:bg-primary disabled:bg-gray-300 disabled:cursor-not-allowed"
                             >
                                 submit

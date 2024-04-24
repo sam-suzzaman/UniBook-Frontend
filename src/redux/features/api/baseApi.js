@@ -8,6 +8,7 @@ const baseApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: "http://localhost:1111/api/v1",
     }),
+    credentials: "include",
     endpoints: (builder) => ({
         getAllCollege: builder.query({
             query: () => "/college",
@@ -21,18 +22,11 @@ const baseApi = createApi({
         getGraduates: builder.query({
             query: () => "/college/graduates",
         }),
-        registerUser: builder.mutation({
-            query: (user) => ({
-                url: "/auth/register",
+        admistUser: builder.mutation({
+            query: (data) => ({
+                url: "/admission",
                 method: "POST",
-                body: user,
-            }),
-        }),
-        loginUser: builder.mutation({
-            query: (user) => ({
-                url: "/auth/login",
-                method: "POST",
-                body: user,
+                body: data,
             }),
         }),
     }),
@@ -43,7 +37,6 @@ export const {
     useGetLimitedCollegeQuery,
     useGetSingleCollegeQuery,
     useGetGraduatesQuery,
-    useRegisterUserMutation,
-    useLoginUserMutation,
+    useAdmistUserMutation,
 } = baseApi;
 export default baseApi;

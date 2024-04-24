@@ -8,23 +8,36 @@ import { setUser, toggleLoading } from "../redux/features/UserSlice";
 const PrivateRoute = ({ children }) => {
     const location = useLocation();
 
-    const { isLoading, email } = useSelector((state) => state.userSlice);
+    const isLoading = false;
+    let email = true;
+    // const { isLoading, email } = useSelector((state) => state.userSlice);
     const dispatch = useDispatch();
 
+
+    // useEffect(() => {
+    //     onAuthStateChanged(firebaseAuth, (user) => {
+    //         if (user) {
+    //             dispatch(
+    //                 setUser({
+    //                     username: user.displayName,
+    //                     email: user.email,
+    //                 })
+    //             );
+    //             dispatch(toggleLoading({ isLoading: false }));
+    //         } else {
+    //             dispatch(toggleLoading({ isLoading: false }));
+    //         }
+    //     });
+    // }, []);
+
     useEffect(() => {
-        onAuthStateChanged(firebaseAuth, (user) => {
-            if (user) {
-                dispatch(
-                    setUser({
-                        username: user.displayName,
-                        email: user.email,
-                    })
-                );
-                dispatch(toggleLoading({ isLoading: false }));
-            } else {
-                dispatch(toggleLoading({ isLoading: false }));
-            }
-        });
+        // if (isCookieExists("uniBookAuthCookie")) {
+        //     console.log("Cookie exists");
+        //     // do cookie exists stuff
+        // } else {
+        //     console.log("Cookie does not exist");
+        //     // do cookie doesn't exist stuff;
+        // }
     }, []);
 
     if (isLoading) {

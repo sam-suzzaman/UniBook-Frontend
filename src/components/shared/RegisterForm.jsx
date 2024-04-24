@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import { useRegisterUserMutation } from "../../redux/features/api/baseApi";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser, toggleLoading } from "../../redux/features/UserSlice";
+import { userRegistrationThunk } from "../../redux/features/UserSlice";
 
 const RegisterForm = ({ setShowWhichForm }) => {
     const [isShowPassowrd, setIsShowPassword] = useState(false);
+
     const { email } = useSelector((state) => state.userSlice);
     const dispatch = useDispatch();
+
     const {
         register,
         handleSubmit,
@@ -18,8 +19,6 @@ const RegisterForm = ({ setShowWhichForm }) => {
         reset,
         formState: { errors },
     } = useForm();
-    const [registerUser, { data: user, isLoading, isError, error }] =
-        useRegisterUserMutation();
 
     let navigate = useNavigate();
     let location = useLocation();
@@ -35,30 +34,12 @@ const RegisterForm = ({ setShowWhichForm }) => {
                 text: "Both password not matched",
             });
         } else {
-            try {
-                const res = await registerUser({ username, email, password });
-                Swal.fire({
-                    icon: "success",
-                    title: "Done...",
-                    text: "Successfully registered",
-                });
-                console.log(res);
-                dispatch(
-                    setUser({
-                        username: res?.data?.result?.username,
-                        email: res?.data?.result?.email,
-                        isLoading: false,
-                    })
-                );
-                // history.push("/");
-            } catch (error) {
-                console.error("Registration error:", error);
-            }
+            const userObject = { username, email, password };
+            dispatch(userRegistrationThunk({ userObject, reset }));
         }
     };
 
     useEffect(() => {
-        // console.log(from);
         if (email) {
             navigate(from, { replace: true });
         }
@@ -215,11 +196,7 @@ const RegisterForm = ({ setShowWhichForm }) => {
                     </div>
                 </div>
                 <div className="btn-row">
-                    <button
-                        className="auth-btn"
-                        type="submit"
-                        disabled={isLoading}
-                    >
+                    <button className="auth-btn" type="submit">
                         register
                     </button>
                 </div>

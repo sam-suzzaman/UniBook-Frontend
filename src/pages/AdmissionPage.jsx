@@ -16,7 +16,12 @@ const AdmissionPage = () => {
         isAllowStepThree: false,
     });
 
-    const passingValues = { step, setStep, stepData, setStepData };
+    const passingValues = {
+        step,
+        setStep,
+        stepData,
+        setStepData,
+    };
     return (
         <Context.Provider value={passingValues}>
             <div className="">
