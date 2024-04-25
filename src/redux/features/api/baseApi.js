@@ -44,6 +44,14 @@ const baseApi = createApi({
                 credentials: "include",
             }),
         }),
+        passwordReset: builder.mutation({
+            query: (data) => ({
+                url: "/user/reset-password",
+                method: "PUT",
+                body: data,
+                credentials: "include",
+            }),
+        }),
     }),
 });
 
@@ -55,5 +63,6 @@ export const {
     useAdmistUserMutation,
     useUpdateProfileMutation,
     useUserLogoutMutation,
+    usePasswordResetMutation,
 } = baseApi;
 export default baseApi;

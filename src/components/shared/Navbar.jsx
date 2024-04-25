@@ -28,7 +28,6 @@ const Navbar = () => {
 
     const handleSocialLogout = async () => {
         const res = await logoutHandler();
-        console.log(res);
 
         if (res?.data?.status) {
             Swal.fire({

@@ -65,9 +65,6 @@ const UpdateInfoForm = ({ setIsEdit, user }) => {
         }
     };
 
-    if (updateUser) {
-        console.log(updateUser);
-    }
 
     return (
         <Wrapper>

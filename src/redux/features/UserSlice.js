@@ -143,7 +143,6 @@ const Slice = createSlice({
     initialState,
     reducers: {
         setUser: (state, { payload }) => {
-            console.log(payload);
             state.username = payload.username;
             state.email = payload.email;
             state.id = payload.id;
@@ -169,6 +168,9 @@ const Slice = createSlice({
             state.isError = false;
             state.isLoading = false;
             localStorage.removeItem("userInfo");
+        },
+        setUserAdmitStatus: (state, action) => {
+            state.isAdmitted = true;
         },
     },
     extraReducers: (builder) => {
@@ -318,5 +320,6 @@ const Slice = createSlice({
             });
     },
 });
-export const { setUser, toggleLoading, userLogout } = Slice.actions;
+export const { setUser, toggleLoading, userLogout, setUserAdmitStatus } =
+    Slice.actions;
 export default Slice.reducer;

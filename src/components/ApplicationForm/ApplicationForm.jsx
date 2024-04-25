@@ -4,12 +4,14 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useAdmistUserMutation } from "../../redux/features/api/baseApi";
+import Swal from "sweetalert2";
+import { setUser } from "../../redux/features/UserSlice";
 
 const ApplicationForm = () => {
-    const { userID } = useSelector((state) => state.userSlice);
-    //  const { email } = useSelector((state) => state.userSlice);
-    const [admitUser, { data: admission, isLoading, isError, error }] =
+    const { id } = useSelector((state) => state.userSlice);
+    const [admitUserHandler, { data: admission, isLoading, isError, error }] =
         useAdmistUserMutation();
+    const dispatch = useDispatch();
 
     const { step, setStep, stepData, setStepData } = useAddmissionContext();
     const {
@@ -51,7 +53,7 @@ const ApplicationForm = () => {
         const { candidateName, address, dob, email, mobile, subject } = data;
         const applicationData = {
             collegeID: stepData.selectedCollegeID,
-            userID,
+            userID: id,
             candidateName,
             candidateEmail: email,
             selectedSubject: subject,
@@ -59,10 +61,48 @@ const ApplicationForm = () => {
             candidateDOB: dob,
             candidateAddress: address,
         };
-        console.log(applicationData);
+        // const applicationData = {
+        //     collegeID: "662744e289ac6b35c32426fb",
+        //     userID: "662a0e3c83109908f661d051",
+        //     candidateName: "demo candidate",
+        //     candidateEmail: "demo@gmail.com",
+        //     selectedSubject: "eee",
+        //     candidatePhoneNumber: "0170000000",
+        //     candidateDOB: "12-12-1999",
+        //     candidateAddress: "hee address",
+        // };
+
         try {
-            const res = await admitUser(applicationData);
-            console.log(res);
+            const res = await admitUserHandler(applicationData);
+
+            if (res?.data?.status) {
+                const updatedUserData = {
+                    username: res.data.updatedUser.username,
+                    email: res.data.updatedUser.email,
+                    id: res.data.updatedUser._id,
+                    isAdmitted: res.data.updatedUser.isAdmitted,
+                    department: res.data.updatedUser.department,
+                    address: res.data.updatedUser.address,
+                    contact: res.data.updatedUser.contact,
+                    isLoading: false,
+                    isError: false,
+                    error: "",
+                };
+                dispatch(setUser(updatedUserData));
+                Swal.fire({
+                    icon: "success",
+                    title: "Admitted",
+                    text: res?.data.message,
+                });
+                reset();
+                setStep(3);
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: res?.error?.data?.message,
+                    text: res?.error?.data?.result || res?.error?.data?.error,
+                });
+            }
         } catch (error) {
             console.log(error);
         }
@@ -88,6 +128,7 @@ const ApplicationForm = () => {
                     </span>
                 </h4>
             </div>
+
             <div className="flex flex-col gap-3 mt-6">
                 <Wrapper>
                     <form
@@ -261,7 +302,7 @@ const ApplicationForm = () => {
                             {/* <p className="error-display">something wrong</p> */}
                         </div>
                         {/* Input: photo */}
-                        <div className="input-row">
+                        {/* <div className="input-row">
                             <label htmlFor="avatar" className="label">
                                 Candidate's Photo:
                             </label>
@@ -280,11 +321,8 @@ const ApplicationForm = () => {
                                     {errors?.photo?.message}
                                 </p>
                             )}
-                            {/* <p className="error-display">something wrong</p> */}
-                        </div>
-                        {/* <div className="btn-row">
-                            <button className="auth-btn">Submit</button>
                         </div> */}
+
                         <div className="flex justify-center mt-8 gap-4">
                             <button
                                 onClick={() => setStep(1)}
@@ -296,7 +334,7 @@ const ApplicationForm = () => {
                                 type="submit"
                                 className="capitalize font-semibold text-base py-1 px-6 bg-secondary rounded-sm text-white transition-all duration-300 hover:bg-primary disabled:bg-gray-300 disabled:cursor-not-allowed"
                             >
-                                submit
+                                {isLoading ? "Loading..." : "submit"}
                             </button>
                         </div>
                     </form>
