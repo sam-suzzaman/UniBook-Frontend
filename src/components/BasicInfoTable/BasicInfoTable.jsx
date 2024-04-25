@@ -1,30 +1,38 @@
 import React from "react";
 
-const BasicInfoTable = () => {
+const BasicInfoTable = ({ user }) => {
     return (
         <table className="profile-table">
             <tbody>
                 <tr className="row">
                     <td className="info">name :</td>
-                    <td className="value number">samsuzzaman</td>
+                    <td className="value number">
+                        {user?.username || "Unknown"}
+                    </td>
                 </tr>
                 <tr className="row">
                     <td className="info">department</td>
                     <td className="value number">
-                        electrical and electronic engineering
+                        {user?.department || "Not available"}
                     </td>
                 </tr>
                 <tr className="row">
                     <td className="info">email</td>
-                    <td className="value tt-none">testingtesting@gmail.com</td>
+                    <td className="value tt-none">
+                        {user?.email || "Not avaialbe"}
+                    </td>
                 </tr>
                 <tr className="row">
                     <td className="info">Address :</td>
-                    <td className="value number">kushtia, dhaka, bangladesh</td>
+                    <td className="value number">
+                        {user?.address || "Not avaialbe"}
+                    </td>
                 </tr>
                 <tr className="row">
                     <td className="info">Mobile :</td>
-                    <td className="value number">+800-00000000000</td>
+                    <td className="value number">
+                        {user?.contact || "Not avaialbe"}
+                    </td>
                 </tr>
             </tbody>
         </table>

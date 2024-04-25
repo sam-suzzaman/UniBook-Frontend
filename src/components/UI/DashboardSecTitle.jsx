@@ -4,7 +4,7 @@ import styled from "styled-components";
 const DashboardSecTitle = ({ title }) => {
     return (
         <Wrapper>
-            <div class="d-sec-title">
+            <div className="d-sec-title">
                 <h2 className="d-title">{title}</h2>
             </div>
         </Wrapper>

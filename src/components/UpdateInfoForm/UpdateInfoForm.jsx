@@ -1,27 +1,108 @@
 import React from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import { useUpdateProfileMutation } from "../../redux/features/api/baseApi";
+import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/features/UserSlice";
 
-const UpdateInfoForm = ({setIsEdit }) => {
+const UpdateInfoForm = ({ setIsEdit, user }) => {
+    const [
+        updateProfileHandler,
+        { data: updateUser, isLoading, isError, error },
+    ] = useUpdateProfileMutation();
+    const dispatch = useDispatch();
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm();
+
+    const onSubmit = async (data) => {
+        const { username, email, contact, address } = data;
+        let updateInfo = { email };
+
+        if (username) {
+            updateInfo = { ...updateInfo, username };
+        }
+        if (contact) {
+            updateInfo = { ...updateInfo, contact };
+        }
+        if (address) {
+            updateInfo = { ...updateInfo, address };
+        }
+
+        const res = await updateProfileHandler(updateInfo);
+
+        if (res?.data?.status) {
+            const updatedUserData = {
+                username: res.data.result.username,
+                email: res.data.result.email,
+                id: res.data.result._id,
+                isAdmitted: res.data.result.isAdmitted,
+                department: res.data.result.department,
+                address: res.data.result.address,
+                contact: res.data.result.contact,
+                isLoading: false,
+                isError: false,
+                error: "",
+            };
+            dispatch(setUser(updatedUserData));
+            Swal.fire({
+                icon: "success",
+                title: "Updated",
+                text: res?.data.message,
+            });
+            reset();
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: res?.error?.data?.message,
+                text: res?.error?.data?.error,
+            });
+        }
+    };
+
+    if (updateUser) {
+        console.log(updateUser);
+    }
+
     return (
         <Wrapper>
-            <form action="" className="mt-4 update-form">
+            <form
+                action=""
+                className="mt-4 update-form"
+                onSubmit={handleSubmit(onSubmit)}
+                autoComplete="off"
+            >
                 <div className="input-container">
                     {/* Username */}
                     <div className="">
                         <label className="form-control w-full max-w-xs">
                             <div className="label">
-                                <span className="label-text">Name</span>
+                                <span className="label-text">Username</span>
                             </div>
                             <input
                                 type="text"
                                 placeholder="Type here"
                                 className="input input-sm rounded-sm input-bordered w-full max-w-xs"
+                                defaultValue={user?.username}
+                                {...register("username", {
+                                    required: {
+                                        value: true,
+                                        message: "username is required",
+                                    },
+                                })}
                             />
-                            {/* <div className="label">
-                        <span className="label-text-alt text-xs font-medium text-red-600">
-                            Bottom Left label
-                        </span>
-                    </div> */}
+                            {errors?.username && (
+                                <div className="label">
+                                    <span className="label-text-alt text-xs font-medium text-red-600">
+                                        {errors?.username?.message}
+                                    </span>
+                                </div>
+                            )}
                         </label>
                     </div>
 
@@ -35,12 +116,22 @@ const UpdateInfoForm = ({setIsEdit }) => {
                                 type="text"
                                 placeholder="Type here"
                                 className="input input-sm rounded-sm input-bordered w-full max-w-xs"
+                                defaultValue={user?.email}
+                                readOnly
+                                {...register("email", {
+                                    required: {
+                                        value: true,
+                                        message: "email is required",
+                                    },
+                                })}
                             />
-                            {/* <div className="label">
-                        <span className="label-text-alt text-xs font-medium text-red-600">
-                            Bottom Left label
-                        </span>
-                    </div> */}
+                            {errors?.email && (
+                                <div className="label">
+                                    <span className="label-text-alt text-xs font-medium text-red-600">
+                                        {errors?.email?.message}
+                                    </span>
+                                </div>
+                            )}
                         </label>
                     </div>
 
@@ -54,12 +145,16 @@ const UpdateInfoForm = ({setIsEdit }) => {
                                 type="text"
                                 placeholder="Type here"
                                 className="input input-sm rounded-sm input-bordered w-full max-w-xs"
+                                defaultValue={user?.address}
+                                {...register("address")}
                             />
-                            {/* <div className="label">
-                        <span className="label-text-alt text-xs font-medium text-red-600">
-                            Bottom Left label
-                        </span>
-                    </div> */}
+                            {errors?.address && (
+                                <div className="label">
+                                    <span className="label-text-alt text-xs font-medium text-red-600">
+                                        {errors?.address?.message}
+                                    </span>
+                                </div>
+                            )}
                         </label>
                     </div>
 
@@ -75,17 +170,23 @@ const UpdateInfoForm = ({setIsEdit }) => {
                                 type="text"
                                 placeholder="Type here"
                                 className="input input-sm rounded-sm input-bordered w-full max-w-xs"
+                                defaultValue={user?.contact}
+                                {...register("contact")}
                             />
-                            {/* <div className="label">
-                        <span className="label-text-alt text-xs font-medium text-red-600">
-                            Bottom Left label
-                        </span>
-                    </div> */}
+                            {errors?.contact && (
+                                <div className="label">
+                                    <span className="label-text-alt text-xs font-medium text-red-600">
+                                        {errors?.contact?.message}
+                                    </span>
+                                </div>
+                            )}
                         </label>
                     </div>
                 </div>
                 <div className="submit-btn mt-4">
-                    <button className="">update</button>
+                    <button className="" type="submit">
+                        {isLoading ? "Loading" : "update"}
+                    </button>
                     <button
                         className="cancel ml-3"
                         onClick={() => setIsEdit(false)}

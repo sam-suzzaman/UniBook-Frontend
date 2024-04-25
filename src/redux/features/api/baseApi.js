@@ -29,6 +29,14 @@ const baseApi = createApi({
                 body: data,
             }),
         }),
+        updateProfile: builder.mutation({
+            query: (data) => ({
+                url: "/user",
+                method: "PUT",
+                body: data,
+                credentials: "include",
+            }),
+        }),
     }),
 });
 
@@ -38,5 +46,6 @@ export const {
     useGetSingleCollegeQuery,
     useGetGraduatesQuery,
     useAdmistUserMutation,
+    useUpdateProfileMutation,
 } = baseApi;
 export default baseApi;

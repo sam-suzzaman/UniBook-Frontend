@@ -10,6 +10,9 @@ const initialState = localStorage.getItem("userInfo")
           email: "",
           id: "",
           isAdmitted: false,
+          department: "",
+          address: "",
+          contact: "",
           isLoading: true,
           isError: false,
           error: "",
@@ -31,6 +34,9 @@ export const googleLoginThunk = createAsyncThunk(
             email: response?.result?.email,
             id: response?.result?._id,
             isAdmitted: response?.result?.isAdmitted,
+            department: response?.result?.department,
+            address: response?.result?.address,
+            contact: response?.result?.contact,
         };
 
         return user;
@@ -50,6 +56,9 @@ export const userRegistrationThunk = createAsyncThunk(
                 email: response?.result?.email,
                 id: response?.result?._id,
                 isAdmitted: response?.result?.isAdmitted,
+                department: response?.result?.department,
+                address: response?.result?.address,
+                contact: response?.result?.contact,
             };
             reset();
             Swal.fire({
@@ -88,6 +97,9 @@ export const userLoginThunk = createAsyncThunk(
                 email: response?.result?.email,
                 id: response?.result?._id,
                 isAdmitted: response?.result?.isAdmitted,
+                department: response?.result?.department,
+                address: response?.result?.address,
+                contact: response?.result?.contact,
             };
             reset();
             Swal.fire({
@@ -177,10 +189,14 @@ const Slice = createSlice({
     initialState,
     reducers: {
         setUser: (state, { payload }) => {
+            console.log(payload);
             state.username = payload.username;
             state.email = payload.email;
             state.id = payload.id;
             state.isAdmitted = payload.isAdmitted;
+            state.department = payload.department;
+            state.address = payload.address;
+            state.contact = payload.contact;
             state.isLoading = payload.isLoading;
             state.isError = payload.isError;
             localStorage.setItem("userInfo", JSON.stringify(payload));
@@ -193,7 +209,11 @@ const Slice = createSlice({
             state.username = "";
             state.id = "";
             state.isAdmitted = false;
+            state.department = "";
+            state.address = "";
+            state.contact = "";
             state.isError = false;
+            state.isLoading = false;
             localStorage.removeItem("userInfo");
         },
     },
@@ -208,6 +228,9 @@ const Slice = createSlice({
                 state.email = "";
                 state.id = "";
                 state.isAdmitted = false;
+                state.department = "";
+                state.address = "";
+                state.contact = "";
             })
             .addCase(userRegistrationThunk.fulfilled, (state, { payload }) => {
                 state.isLoading = false;
@@ -217,6 +240,9 @@ const Slice = createSlice({
                 state.email = payload.email;
                 state.id = payload.id;
                 state.isAdmitted = payload.isAdmitted;
+                state.department = payload.department;
+                state.address = payload.address;
+                state.contact = payload.contact;
                 localStorage.setItem(
                     "userInfo",
                     JSON.stringify({
@@ -236,6 +262,9 @@ const Slice = createSlice({
                 state.email = "";
                 state.id = "";
                 state.isAdmitted = false;
+                state.department = "";
+                state.address = "";
+                state.contact = "";
             });
 
         // for user login
@@ -248,6 +277,9 @@ const Slice = createSlice({
                 state.email = "";
                 state.id = "";
                 state.isAdmitted = false;
+                state.department = "";
+                state.address = "";
+                state.contact = "";
             })
             .addCase(userLoginThunk.fulfilled, (state, { payload }) => {
                 state.isLoading = false;
@@ -257,6 +289,9 @@ const Slice = createSlice({
                 state.email = payload.email;
                 state.id = payload.id;
                 state.isAdmitted = payload.isAdmitted;
+                state.department = payload.department;
+                state.address = payload.address;
+                state.contact = payload.contact;
                 localStorage.setItem(
                     "userInfo",
                     JSON.stringify({
@@ -275,6 +310,9 @@ const Slice = createSlice({
                 state.email = "";
                 state.id = "";
                 state.isAdmitted = false;
+                state.department = "";
+                state.address = "";
+                state.contact = "";
             });
 
         // for googleLogin
@@ -287,6 +325,9 @@ const Slice = createSlice({
                 state.email = "";
                 state.id = "";
                 state.isAdmitted = false;
+                state.department = "";
+                state.address = "";
+                state.contact = "";
             })
             .addCase(googleLoginThunk.fulfilled, (state, { payload }) => {
                 state.isLoading = false;
@@ -296,6 +337,9 @@ const Slice = createSlice({
                 state.email = payload.email;
                 state.id = payload.id;
                 state.isAdmitted = payload.isAdmitted;
+                state.department = payload.department;
+                state.address = payload.address;
+                state.contact = payload.contact;
                 localStorage.setItem(
                     "userInfo",
                     JSON.stringify({
@@ -314,6 +358,9 @@ const Slice = createSlice({
                 state.email = "";
                 state.id = "";
                 state.isAdmitted = false;
+                state.department = "";
+                state.address = "";
+                state.contact = "";
             });
     },
 });

@@ -11,9 +11,11 @@ import avatar from "../assets/avatar.jpeg";
 import { FiEdit } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { GrPowerReset } from "react-icons/gr";
+import { useSelector } from "react-redux";
 
 const ProfilePage = () => {
     const [isEdit, setIsEdit] = useState(false);
+    const user = useSelector((state) => state.userSlice);
 
     return (
         <Wrapper>
@@ -26,7 +28,7 @@ const ProfilePage = () => {
 
                     <div className="control flex flex-col justify-center items-center mt-[10px]">
                         <h5 className="capitalize overflow-hidden text-ellipsis font-bold text-[14px] text-primary">
-                            samsuzzaman siddik
+                            {user?.username || "Unknown"}
                         </h5>
                         <Link
                             to={`/reset`}
@@ -82,9 +84,9 @@ const ProfilePage = () => {
                             )}
                         </div>
                         {isEdit ? (
-                            <UpdateInfoForm setIsEdit={setIsEdit} />
+                            <UpdateInfoForm setIsEdit={setIsEdit} user={user} />
                         ) : (
-                            <BasicInfoTable />
+                            <BasicInfoTable user={user} />
                         )}
                     </div>
                 </div>

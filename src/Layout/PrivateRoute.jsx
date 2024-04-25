@@ -25,11 +25,15 @@ const PrivateRoute = ({ children }) => {
     //     });
     // }, []);
 
-    if (isLoading) {
-        return <h1>loading....</h1>;
-    }
+    // if (isLoading) {
+    //     return <h1>loading....</h1>;
+    // }
 
-    if (!isLoading && !email) {
+    // if (!isLoading && !email) {
+    //     return <Navigate to="/auth" state={{ from: location }} replace />;
+    //     // return <Navigate to="/auth" state={{ path: pathname }} />;
+    // }
+    if (!email) {
         return <Navigate to="/auth" state={{ from: location }} replace />;
         // return <Navigate to="/auth" state={{ path: pathname }} />;
     }
