@@ -37,6 +37,13 @@ const baseApi = createApi({
                 credentials: "include",
             }),
         }),
+        userLogout: builder.mutation({
+            query: () => ({
+                url: "/auth/logout",
+                method: "POST",
+                credentials: "include",
+            }),
+        }),
     }),
 });
 
@@ -47,5 +54,6 @@ export const {
     useGetGraduatesQuery,
     useAdmistUserMutation,
     useUpdateProfileMutation,
+    useUserLogoutMutation,
 } = baseApi;
 export default baseApi;

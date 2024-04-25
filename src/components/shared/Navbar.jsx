@@ -6,23 +6,46 @@ import SearchModal from "./SearchModal";
 import { FaRegUser } from "react-icons/fa";
 import { LuSchool } from "react-icons/lu";
 import { IoIosLogOut, IoIosLogIn } from "react-icons/io";
-import { signOut } from "firebase/auth";
-import firebaseAuth from "../../firebase-init";
 
 import { useDispatch, useSelector } from "react-redux";
-import { userLogout, userLogoutThunk } from "../../redux/features/UserSlice";
+import { userLogout } from "../../redux/features/UserSlice";
+import { useUserLogoutMutation } from "../../redux/features/api/baseApi";
+import Swal from "sweetalert2";
+
+const navbarData = [
+    { id: 1, title: "home", path: "." },
+    { id: 2, title: "college", path: "college" },
+    { id: 3, title: "admission", path: "admission" },
+    // { id: 4, title: "login", path: "/login" },
+    // { id: 5, title: "home", path: "/" },
+];
 
 const Navbar = () => {
     const dispatch = useDispatch();
     const { username, email } = useSelector((state) => state.userSlice);
+    const [logoutHandler, { data: logoutData, isLoading, isError, error }] =
+        useUserLogoutMutation();
 
-    const navbarData = [
-        { id: 1, title: "home", path: "." },
-        { id: 2, title: "college", path: "college" },
-        { id: 3, title: "admission", path: "admission" },
-        // { id: 4, title: "login", path: "/login" },
-        // { id: 5, title: "home", path: "/" },
-    ];
+    const handleSocialLogout = async () => {
+        const res = await logoutHandler();
+        console.log(res);
+
+        if (res?.data?.status) {
+            Swal.fire({
+                icon: "success",
+                title: "Logout...",
+                text: res.data.message,
+            });
+            dispatch(userLogout());
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: res?.error?.data?.message,
+                text: res?.error?.data?.error,
+            });
+        }
+    };
+
     const menu = navbarData?.map((item) => (
         <li key={item.id}>
             <NavLink
@@ -33,12 +56,6 @@ const Navbar = () => {
             </NavLink>
         </li>
     ));
-
-    const handleSocialLogout = async () => {
-        // signOut(firebaseAuth);
-        await dispatch(userLogoutThunk());
-        dispatch(userLogout());
-    };
     return (
         <div className="bg-base-100 shadow-sm border-b-2 border-gray-100 flex justify-center items-center">
             <div className="navbar w-full max-w-[1200px]">
