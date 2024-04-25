@@ -39,7 +39,12 @@ const HomePage = () => {
                 ) : (
                     <div className="grid grid-cols-1 min-[800px]:grid-cols-2  min-[1200px]:grid-cols-3 gap-8 justify-between">
                         {spotLightColleges?.result?.map((college) => {
-                            return <CollegeCard college={college} />;
+                            return (
+                                <CollegeCard
+                                    college={college}
+                                    key={college._id}
+                                />
+                            );
                         })}
                     </div>
                 )}

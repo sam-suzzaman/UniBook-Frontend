@@ -107,6 +107,52 @@ export const userLoginThunk = createAsyncThunk(
     }
 );
 
+export const userLogoutThunk = createAsyncThunk(
+    "UserSlice/userLogout",
+    async () => {
+        const URL = "http://localhost:1111/api/v1/auth/logout";
+
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        };
+        try {
+            const response = await fetch(URL, options);
+            const data = await response.json();
+            console.log("logout", data);
+            // return data;
+        } catch (error) {
+            console.log("google login issue:", error);
+        }
+
+        if (response.status) {
+            const user = {
+                username: response?.result?.username,
+                email: response?.result?.email,
+                id: response?.result?._id,
+                isAdmitted: response?.result?.isAdmitted,
+            };
+            reset();
+            Swal.fire({
+                icon: "success",
+                title: "Done",
+                text: response.message,
+            });
+            return user;
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: response.message,
+                text: response.result,
+            });
+            throw new Error(response.result);
+        }
+    }
+);
+
 const getUserHandler = async (url, userData) => {
     const options = {
         method: "POST",
@@ -114,6 +160,7 @@ const getUserHandler = async (url, userData) => {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
+        credentials: "include",
     };
     try {
         const response = await fetch(url, options);

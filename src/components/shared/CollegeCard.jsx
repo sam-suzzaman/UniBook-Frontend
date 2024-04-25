@@ -63,7 +63,7 @@ const CollegeCard = ({ college }) => {
                         {college?.events?.map((event, i) => (
                             <li
                                 className="text-[14px] mb-[3px] font-medium flex justify-start items-center capitalize"
-                                key={i + event?.title}
+                                key={i + 1 + event.title}
                             >
                                 <FaArrowRight className="text-[11px] mr-1" />
                                 <span>
@@ -84,7 +84,7 @@ const CollegeCard = ({ college }) => {
                         {college?.sports?.map((sport, i) => (
                             <li
                                 className="text-[14px] mb-[3px] font-medium flex justify-start items-center capitalize"
-                                key={i + sport.title}
+                                key={i + 2 + sport.title}
                             >
                                 <FaArrowRight className="text-[11px] mr-1" />
                                 {sport.title}

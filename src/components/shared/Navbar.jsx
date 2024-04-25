@@ -8,8 +8,9 @@ import { LuSchool } from "react-icons/lu";
 import { IoIosLogOut, IoIosLogIn } from "react-icons/io";
 import { signOut } from "firebase/auth";
 import firebaseAuth from "../../firebase-init";
+
 import { useDispatch, useSelector } from "react-redux";
-import { userLogout } from "../../redux/features/UserSlice";
+import { userLogout, userLogoutThunk } from "../../redux/features/UserSlice";
 
 const Navbar = () => {
     const dispatch = useDispatch();
@@ -33,8 +34,9 @@ const Navbar = () => {
         </li>
     ));
 
-    const handleSocialLogout = () => {
-        signOut(firebaseAuth);
+    const handleSocialLogout = async () => {
+        // signOut(firebaseAuth);
+        await dispatch(userLogoutThunk());
         dispatch(userLogout());
     };
     return (
