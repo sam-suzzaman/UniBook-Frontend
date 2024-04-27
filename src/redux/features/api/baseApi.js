@@ -7,8 +7,9 @@ const baseApi = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
         baseUrl: "http://localhost:1111/api/v1",
+        credentials: "include",
     }),
-    credentials: "include",
+
     endpoints: (builder) => ({
         getAllCollege: builder.query({
             query: () => "/college",
@@ -27,6 +28,7 @@ const baseApi = createApi({
                 url: "/admission",
                 method: "POST",
                 body: data,
+                credentials: "include",
             }),
         }),
         updateProfile: builder.mutation({
@@ -43,6 +45,7 @@ const baseApi = createApi({
                 method: "POST",
                 credentials: "include",
             }),
+            invalidatesTags: ["admittedCollege"],
         }),
         passwordReset: builder.mutation({
             query: (data) => ({
@@ -51,6 +54,25 @@ const baseApi = createApi({
                 body: data,
                 credentials: "include",
             }),
+        }),
+        getAdmittedCollege: builder.query({
+            credentials: "include",
+            query: () => "/admission",
+            providesTags: ["admittedCollege"],
+        }),
+        addReview: builder.mutation({
+            query: (data) => ({
+                url: "/review",
+                method: "POST",
+                body: data,
+                credentials: "include",
+            }),
+            invalidatesTags: ["singleReview"],
+        }),
+        getSingleReview: builder.query({
+            credentials: "include",
+            query: ({ userID, collegeID }) => `/review/${userID}/${collegeID}`,
+            providesTags: ["singleReview"],
         }),
     }),
 });
@@ -64,5 +86,8 @@ export const {
     useUpdateProfileMutation,
     useUserLogoutMutation,
     usePasswordResetMutation,
+    useGetAdmittedCollegeQuery,
+    useAddReviewMutation,
+    useGetSingleReviewQuery,
 } = baseApi;
 export default baseApi;

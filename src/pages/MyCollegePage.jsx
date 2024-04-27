@@ -1,16 +1,145 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import thumbnail from "../assets/CampusThumb/College1.jpg";
 import { TbArrowBigRight } from "react-icons/tb";
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
 import DashboardSecTitle from "../components/UI/DashboardSecTitle";
 
 import Rating from "react-rating";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import {
+    useAddReviewMutation,
+    useGetAdmittedCollegeQuery,
+    useGetSingleReviewQuery,
+} from "../redux/features/api/baseApi";
+import Loading from "../components/shared/Loading";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
+
+import noResultPic from "../assets/void.png";
 
 const MyCollegePage = () => {
     const [ratingValue, setRatingValue] = useState(0);
+    const [isShowUpdateBtn, setIsShowUpdateBtn] = useState(false);
+    const [college, setCollege] = useState(null);
+
+    const {
+        data: admissionData,
+        isLoading: collegeLoading,
+        isError: collegeError,
+        error: collegeErrorMsg,
+    } = useGetAdmittedCollegeQuery();
+    const [reviewHandler, { data: review, isLoading, isError, error }] =
+        useAddReviewMutation();
+    const { id } = useSelector((state) => state.userSlice);
+    const {
+        data: commentData,
+        isLoading: commentLoading,
+        isError: isCommentError,
+        error: commentError,
+    } = useGetSingleReviewQuery({ userID: id, collegeID: college?._id });
+
+    useEffect(() => {
+        setCollege(admissionData?.result?.collegeID);
+    }, [admissionData]);
+
+    useEffect(() => {
+        // setInitialComment(commentData?.result?.comment);
+        setRatingValue(commentData?.result?.rating || 0);
+        setValue("comment", commentData?.result?.comment);
+        if (commentData?.result?.comment) {
+            setIsShowUpdateBtn(true);
+        } else {
+            setIsShowUpdateBtn(false);
+        }
+    }, [commentData]);
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+        setValue,
+    } = useForm();
+
+    if (collegeLoading || commentLoading) {
+        return (
+            <div className="h-full flex justify-center items-center">
+                <Loading />
+            </div>
+        );
+    }
+
+    if (commentData) {
+        // console.log(college?.collegeID);
+        console.log(commentData?.result?.comment);
+    }
+
+    if (isCommentError) {
+        // console.log(collegeErrorMsg);
+        // console.log(commentError);
+    }
+
+    const reviewSubmitHandler = async (data) => {
+        if (ratingValue < 1) {
+            Swal.fire({
+                icon: "error",
+                title: "Opps",
+                text: "Add a review rating value",
+            });
+        } else {
+            const comment = {
+                userID: id,
+                collegeID: college._id,
+                rating: ratingValue,
+                comment: data.comment,
+            };
+            const res = await reviewHandler(comment);
+            console.log(res);
+            if (res?.data?.status) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Done",
+                    text: res?.data.message,
+                });
+                reset();
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: res?.error?.data?.message,
+                    text: res?.error?.data?.error || res?.error?.data?.result,
+                });
+            }
+        }
+    };
+
+    if (!college?._id) {
+        return (
+            <div className="not-admit-container flex justify-center items-center flex-col h-full">
+                <div className="w-full max-w-[300px] mx-auto mb-6">
+                    <img src={noResultPic} alt="no result found" />
+                </div>
+                <div className="">
+                    <h3 className="text-xl md:text-2xl font-bold text-center text-primary capitalize">
+                        Not Admitted
+                    </h3>
+                    <p className="text-center text-xs md:text-sm font-normal mt-4 w-full max-w-[600px]">
+                        Opps sorry, you are not yet admitted to a college, first
+                        take an admission to a college.
+                    </p>
+                </div>
+                <div className="flex justify-center mt-5">
+                    <Link
+                        to="/admission"
+                        className="capitalize text-sm font-medium bg-secondary text-white px-4 py-1 rounded-sm transition-all duration-300 hover:bg-primary"
+                    >
+                        take admission
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <Wrapper>
@@ -22,18 +151,18 @@ const MyCollegePage = () => {
                 {/* My College details row */}
                 <div className="">
                     <div className="college-title-row mb-8">
-                        <h2 className="title">
-                            jaitya kabi kazi nazrul islam university
-                        </h2>
+                        <h2 className="title">{college?.collegeName}</h2>
                         <h5 className="subtitle">
                             Established on:{" "}
-                            <span className="font-bold">1997</span>
+                            <span className="font-bold">
+                                {college?.establishedOn}
+                            </span>
                         </h5>
                     </div>
                     <div className="thumb-row">
                         <img
-                            src={thumbnail}
-                            alt="college thumbnail"
+                            src={college?.collegeThubnail}
+                            alt={college?.collegeName}
                             className="college-thumb"
                         />
                     </div>
@@ -52,44 +181,8 @@ const MyCollegePage = () => {
                             {/* data */}
                             <div className="collapse-content option-content bg-[#ececec]">
                                 <div className="pt-4">
-                                    <p className="mb-4 text-[16px] sm:text-sm text-justify font-medium text-black">
-                                        A leading research university known for
-                                        its strong programs in science,
-                                        technology, and engineering. Located in
-                                        Sunnydale, California, Sunnydale offers
-                                        a vibrant campus life and excellent
-                                        opportunities for undergraduate
-                                        research.
-                                    </p>
-                                    <p className="mb-4 text-[16px] sm:text-sm text-justify font-medium text-black">
-                                        Evergreen University, nestled amidst
-                                        verdant landscapes, is a prestigious
-                                        institution dedicated to fostering
-                                        academic excellence, innovation, and
-                                        holistic student development.
-                                        Established over a century ago,
-                                        Evergreen has continuously evolved to
-                                        meet the evolving needs of society while
-                                        upholding its commitment to providing a
-                                        nurturing and inspiring educational
-                                        environment.
-                                    </p>
-                                    <p className="mb-4 text-[16px] sm:text-sm text-justify font-medium text-black">
-                                        With a diverse community of students,
-                                        faculty, and staff, Evergreen University
-                                        offers a dynamic learning environment
-                                        where creativity, critical thinking, and
-                                        collaboration thrive. Our commitment to
-                                        research excellence is reflected in our
-                                        groundbreaking discoveries in
-                                        environmental science, sustainable
-                                        development, and renewable energy.
-                                    </p>
-                                    <p className=" text-[16px] sm:text-sm text-justify font-medium text-black">
-                                        Join us at Evergreen University, where
-                                        the pursuit of knowledge meets the
-                                        spirit of innovation, and together, we
-                                        shape a brighter future.
+                                    <p className="mb-4 text-[16px] sm:text-sm text-justify font-medium text-black whitespace-pre-line">
+                                        {college?.collegeInfo}
                                     </p>
                                 </div>
                             </div>
@@ -117,33 +210,22 @@ const MyCollegePage = () => {
                                             </h3>
                                         </div>
                                         <div className=" mt-3 pl-4">
-                                            <h5 className="deadline-title flex justify-start items-center mb-1">
-                                                <TbArrowBigRight className="inline-block mr-1 font-bold text-primary text-xs" />
-                                                <span className="text-[16px] font-semibold mr-1 ">
-                                                    Spring Semester:
-                                                </span>
-                                                <span className="text-[15px] font-bold bg-neutral px-3 py-[1px] rounded-md">
-                                                    January 15 - April 30
-                                                </span>
-                                            </h5>
-                                            <h5 className="deadline-title flex justify-start items-center mb-1">
-                                                <TbArrowBigRight className="inline-block mr-1 font-bold text-primary text-xs" />
-                                                <span className="text-[16px] font-semibold mr-1 ">
-                                                    Autum Semester:
-                                                </span>
-                                                <span className="text-[15px] font-bold bg-neutral px-3 py-[1px] rounded-md">
-                                                    September 1 - December 15
-                                                </span>
-                                            </h5>
-                                            {/* <h5 className="deadline-title flex justify-start items-center">
-                                            <TbArrowBigRight className="inline-block mr-1 font-bold text-primary text-lg" />
-                                            <span className="text-sm font-semibold mr-2 ">
-                                                Autum Semester:
-                                            </span>
-                                            <span className="text-[15px] font-bold bg-neutral px-3 py-[2px] rounded-md">
-                                                September 1 - December 15
-                                            </span>
-                                        </h5> */}
+                                            {college?.addmissionProcess[0]?.dates?.map(
+                                                (date) => (
+                                                    <h5
+                                                        className="deadline-title flex justify-start items-center mb-1 capitalize"
+                                                        key={date.title}
+                                                    >
+                                                        <TbArrowBigRight className="inline-block mr-1 font-bold text-primary text-xs" />
+                                                        <span className="text-[16px] font-semibold mr-1 ">
+                                                            {date?.title}:
+                                                        </span>
+                                                        <span className="text-[15px] font-bold bg-neutral px-3 py-[1px] rounded-md">
+                                                            {date?.duration}
+                                                        </span>
+                                                    </h5>
+                                                )
+                                            )}
                                         </div>
                                     </div>
                                     {/* Step-2:deadline */}
@@ -157,24 +239,23 @@ const MyCollegePage = () => {
                                             </h3>
                                         </div>
                                         <div className=" mt-3 pl-4">
-                                            <h5 className="deadline-title flex justify-start items-center mb-1">
-                                                <FaRegArrowAltCircleRight className="inline-block mr-1 font-bold text-primary text-xs" />
-                                                <span className="text-[16px] font-semibold mr-1 ">
-                                                    Spring Semester:
-                                                </span>
-                                                <span className="text-[15px] font-bold bg-neutral px-3 py-[1px] rounded-md">
-                                                    January 01 to 10
-                                                </span>
-                                            </h5>
-                                            <h5 className="deadline-title flex justify-start items-center">
-                                                <FaRegArrowAltCircleRight className="inline-block mr-1 font-bold text-primary text-xs" />
-                                                <span className="text-[16px] font-semibold mr-1 ">
-                                                    Autum Semester:
-                                                </span>
-                                                <span className="text-[15px] font-bold bg-neutral px-3 py-[1px] rounded-md">
-                                                    October 20 - 30
-                                                </span>
-                                            </h5>
+                                            {college?.addmissionProcess[1]?.dates?.map(
+                                                (date) => (
+                                                    <h5
+                                                        className="deadline-title flex justify-start items-center mb-1 capitalize"
+                                                        key={date.title}
+                                                    >
+                                                        <FaRegArrowAltCircleRight className="inline-block mr-1 font-bold text-primary text-xs" />
+                                                        <span className="text-[16px] font-semibold mr-1 ">
+                                                            {date?.title}:
+                                                        </span>
+                                                        <span className="text-[15px] font-bold bg-neutral px-3 py-[1px] rounded-md">
+                                                            {date?.duration}
+                                                        </span>
+                                                    </h5>
+                                                )
+                                            )}
+
                                             {/* <h5 className="deadline-title flex justify-start items-center">
                                             <FaRegArrowAltCircleRight className="inline-block mr-1 font-bold text-primary text-xs" />
                                             <span className="text-sm font-semibold mr-2 ">
@@ -197,26 +278,22 @@ const MyCollegePage = () => {
                                             </h3>
                                         </div>
                                         <div className=" mt-3 pl-4">
-                                            <p className="text-[16px] font-semibold mb-1 text-[#393939]">
-                                                01. Complete Application
-                                                (Online)
-                                            </p>
-                                            <p className="text-[16px] font-semibold mb-1 text-[#393939]">
-                                                02. Official school transcript
-                                            </p>
-                                            <p className="text-[16px] font-semibold mb-1 text-[#393939]">
-                                                03. Personal essay (500 words)
-                                            </p>
-                                            <p className="text-[16px] font-semibold mb-1 text-[#393939]">
-                                                04. Two letters of
-                                                recommendation (one academic,
-                                                one counselor)
-                                            </p>
-                                            <p className="text-[16px] font-semibold mb-1 text-[#393939]">
-                                                05. Standardized test scores
-                                                (optional - test-optional
-                                                policy)
-                                            </p>
+                                            {college?.addmissionProcess[2]?.data?.map(
+                                                (req, i) => (
+                                                    <p
+                                                        className="text-[16px] font-semibold mb-1 text-[#393939]"
+                                                        key={req.title}
+                                                    >
+                                                        {i < 10
+                                                            ? `0${i + 1}. ${
+                                                                  req?.title
+                                                              }`
+                                                            : `${i + 1}. ${
+                                                                  req?.title
+                                                              }`}
+                                                    </p>
+                                                )
+                                            )}
                                         </div>
                                     </div>
                                     {/* Step-4:Apply */}
@@ -230,29 +307,12 @@ const MyCollegePage = () => {
                                             </h3>
                                         </div>
                                         <div className="mt-3 pl-1">
-                                            <p className="text-[16px] text-justify font-medium text-[#393939]">
-                                                The Semester admission process
-                                                at Evergreen University offers
-                                                prospective students the
-                                                opportunity to embark on their
-                                                academic journey during the
-                                                autumn/spring months. During
-                                                these period, applicants can
-                                                submit their applications for
-                                                undergraduate and graduate
-                                                programs, including required
-                                                documents such as transcripts,
-                                                letters of recommendation, and
-                                                standardized test scores(as said
-                                                before).
-                                            </p>
-                                            <p className="text-[16px] text-justify font-medium text-[#393939] mt-2">
-                                                Admissions decisions are
-                                                typically communicated to
-                                                applicants by late January,
-                                                allowing admitted students to
-                                                prepare for enrollment in the
-                                                upcoming Fall Semester.
+                                            <p className="text-[16px] text-justify font-medium text-[#393939] whitespace-pre-line">
+                                                {
+                                                    college?.result
+                                                        ?.addmissionProcess[3]
+                                                        ?.data
+                                                }
                                             </p>
                                         </div>
                                     </div>
@@ -267,13 +327,12 @@ const MyCollegePage = () => {
                                             </h3>
                                         </div>
                                         <div className="mt-3 pl-1">
-                                            <p className="text-[16px] text-justify font-medium text-[#393939]">
-                                                Applications are reviewed
-                                                holistically, considering
-                                                academic achievement,
-                                                extracurricular involvement,
-                                                essays, and letters of
-                                                recommendation.
+                                            <p className="text-[16px] text-justify font-medium text-[#393939] whitespace-pre-line">
+                                                {
+                                                    college?.result
+                                                        ?.addmissionProcess[4]
+                                                        ?.data
+                                                }
                                             </p>
                                         </div>
                                     </div>
@@ -288,10 +347,12 @@ const MyCollegePage = () => {
                                             </h3>
                                         </div>
                                         <div className="mt-3 pl-1">
-                                            <p className="text-[16px] text-justify font-medium text-[#393939]">
-                                                100Taka (waiver available for
-                                                those demonstrating financial
-                                                need)
+                                            <p className="text-[16px] text-justify font-medium text-[#393939] whitespace-pre-line">
+                                                {
+                                                    college?.result
+                                                        ?.addmissionProcess[5]
+                                                        ?.data
+                                                }
                                             </p>
                                         </div>
                                     </div>
@@ -311,86 +372,32 @@ const MyCollegePage = () => {
                             <div className="collapse-content option-content bg-[#ececec]">
                                 <div className="pt-4">
                                     {/* Event-1 */}
-                                    <div className="college-event mb-8">
-                                        <h5 className="event-title font-bold text-primary text-[21px]">
-                                            <span className="mr-2 text-secondary text-xl">
-                                                01.
-                                            </span>
-                                            Career Fair
-                                        </h5>
-                                        <div className="event-date text-sm mt-1">
-                                            Date:
-                                            <p className=" text-xs font-bold bg-neutral text-primary inline-block px-2 rounded-md">
-                                                October 10, 2024
-                                            </p>
+                                    {college?.events?.map((event, i) => (
+                                        <div
+                                            className="college-event mb-8"
+                                            key={event?.title}
+                                        >
+                                            <h5 className="event-title font-bold text-primary text-[21px] capitalize">
+                                                <span className="mr-2 text-secondary text-xl ">
+                                                    {i < 10
+                                                        ? `0${i + 1}.`
+                                                        : `${i + 1}.`}
+                                                </span>
+                                                {event?.title}
+                                            </h5>
+                                            <div className="event-date text-sm mt-1">
+                                                Date:
+                                                <p className=" text-xs font-bold bg-neutral text-primary inline-block px-2 rounded-md">
+                                                    {event?.date}
+                                                </p>
+                                            </div>
+                                            <div className="event-des mt-3">
+                                                <p className="mb-3 text-[16px] sm:text-sm text-justify font-medium text-black whitespace-pre-line">
+                                                    {event?.details}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className="event-des mt-3">
-                                            <p className="mb-3 text-[16px] sm:text-sm text-justify font-medium text-black">
-                                                The Career Fair at Evergreen
-                                                University is a highly
-                                                anticipated event that connects
-                                                students with leading employers
-                                                from various industries.
-                                                Featuring networking
-                                                opportunities, informational
-                                                sessions, and on-site
-                                                interviews, the Career Fair
-                                                provides students with
-                                                invaluable insights into
-                                                potential career paths and
-                                                internship opportunities.
-                                            </p>
-                                            <p className=" text-[16px] sm:text-sm text-justify font-medium text-black">
-                                                With participation from renowned
-                                                companies and organizations,
-                                                students have the chance to
-                                                explore diverse career options
-                                                and make meaningful connections
-                                                that can shape their future
-                                                professional endeavors.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* Event-2 */}
-                                    <div className="college-event">
-                                        <h5 className="event-title font-bold text-primary text-[21px]">
-                                            <span className="mr-2 text-secondary text-xl capitalize">
-                                                02.
-                                            </span>
-                                            Homecoming Weekend
-                                        </h5>
-                                        <div className="event-date text-sm mt-1">
-                                            Date:
-                                            <p className=" text-xs font-bold bg-neutral text-primary inline-block px-2 rounded-md">
-                                                November 5 to 7
-                                            </p>
-                                        </div>
-                                        <div className="event-des mt-3">
-                                            <p className="mb-3 text-[16px] sm:text-sm text-justify font-medium text-black">
-                                                Homecoming Weekend is a
-                                                time-honored tradition at
-                                                Evergreen University, bringing
-                                                together alumni, students,
-                                                faculty, and staff for a weekend
-                                                of celebration and nostalgia.
-                                                From spirited pep rallies and
-                                                tailgate parties to engaging
-                                                alumni panels and class reunions
-                                            </p>
-                                            <p className=" text-[16px] sm:text-sm text-justify font-medium text-black">
-                                                Homecoming Weekend is a festive
-                                                occasion that strengthens the
-                                                bonds of the Evergreen
-                                                community. With a lineup of
-                                                exciting events and activities,
-                                                Homecoming Weekend is an
-                                                opportunity for past and present
-                                                members of the Evergreen family
-                                                to reconnect, reminisce, and
-                                                create new memories together.
-                                            </p>
-                                        </div>
-                                    </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -406,118 +413,61 @@ const MyCollegePage = () => {
                             </div>
                             <div className="collapse-content option-content bg-[#ececec]">
                                 <div className="pt-4">
-                                    {/* Research-1 */}
-                                    <div className="college-event mb-8">
-                                        <h5 className="event-title font-bold text-primary text-[21px]">
-                                            <span className="mr-2 text-secondary text-xl">
-                                                01.
-                                            </span>
-                                            "Advances in Climate Change
-                                            Research: Implications for Policy
-                                            and Practice"
-                                        </h5>
-                                        <div className="event-date text-sm mt-1">
-                                            Publised on:
-                                            <p className=" text-xs font-bold bg-neutral text-primary inline-block px-2 rounded-md">
-                                                October 10, 2024
-                                            </p>
-                                        </div>
-                                        <div className="event-des mt-3">
-                                            <p className="mb-3 text-[16px] sm:text-sm text-justify font-medium text-black">
-                                                <span className="font-bold text-primary">
-                                                    Overview:{" "}
-                                                </span>
-                                                The Career Fair at Evergreen
-                                                University is a highly
-                                                anticipated event that connects
-                                                students with leading employers
-                                                from various industries.
-                                                Featuring networking
-                                                opportunities, informational
-                                                sessions, and on-site
-                                                interviews, the Career Fair
-                                                provides students with
-                                                invaluable insights into
-                                                potential career paths and
-                                                internship opportunities.
-                                            </p>
-                                            <p className=" text-[16px] sm:text-sm text-justify font-medium text-black">
-                                                With participation from renowned
-                                                companies and organizations,
-                                                students have the chance to
-                                                explore diverse career options
-                                                and make meaningful connections
-                                                that can shape their future
-                                                professional endeavors.
-                                            </p>
-                                        </div>
-                                        <div className="research-link mt-3">
-                                            <Link
-                                                to="https://www.researchgate.net/publication/356554931_Elements_of_Child-Friendly_Environment_The_Effort_to_Provide_an_Anti-Violence_Learning_Environment"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-primary text-xs inline-block bg-accent font-semibold px-4 py-1 rounded-sm"
+                                    {college?.researches?.researchData?.map(
+                                        (research, i) => (
+                                            <div
+                                                className="college-event mb-8"
+                                                key={research?.paperTitle}
                                             >
-                                                View Publication
-                                            </Link>
-                                        </div>
-                                    </div>
-                                    {/* Research-2 */}
-                                    <div className="college-event mb-8">
-                                        <h5 className="event-title font-bold text-primary text-[21px]">
-                                            <span className="mr-2 text-secondary text-xl">
-                                                02.
-                                            </span>
-                                            "Innovations in Renewable Energy
-                                            Technologies: A Review of Recent
-                                            Developments"
-                                        </h5>
-                                        <div className="event-date text-sm mt-1">
-                                            Publised on:
-                                            <p className=" text-xs font-bold bg-neutral text-primary inline-block px-2 rounded-md">
-                                                October 10, 2024
-                                            </p>
-                                        </div>
-                                        <div className="event-des mt-3">
-                                            <p className="mb-3 text-[16px] sm:text-sm text-justify font-medium text-black">
-                                                <span className="font-bold text-primary">
-                                                    Overview:{" "}
-                                                </span>
-                                                The Career Fair at Evergreen
-                                                University is a highly
-                                                anticipated event that connects
-                                                students with leading employers
-                                                from various industries.
-                                                Featuring networking
-                                                opportunities, informational
-                                                sessions, and on-site
-                                                interviews, the Career Fair
-                                                provides students with
-                                                invaluable insights into
-                                                potential career paths and
-                                                internship opportunities.
-                                            </p>
-                                            <p className=" text-[16px] sm:text-sm text-justify font-medium text-black">
-                                                With participation from renowned
-                                                companies and organizations,
-                                                students have the chance to
-                                                explore diverse career options
-                                                and make meaningful connections
-                                                that can shape their future
-                                                professional endeavors.
-                                            </p>
-                                        </div>
-                                        <div className="research-link mt-3">
-                                            <Link
-                                                to="https://www.researchgate.net/publication/356554931_Elements_of_Child-Friendly_Environment_The_Effort_to_Provide_an_Anti-Violence_Learning_Environment"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-primary text-xs inline-block bg-accent font-semibold px-4 py-1 rounded-sm"
-                                            >
-                                                View Publication
-                                            </Link>
-                                        </div>
-                                    </div>
+                                                <h5 className="event-title font-bold text-primary text-[21px]">
+                                                    <span className="mr-2 text-secondary text-xl">
+                                                        {i < 10
+                                                            ? `0${i + 1}.`
+                                                            : `${i + 1}.`}
+                                                    </span>
+                                                    {research?.paperTitle}
+                                                </h5>
+                                                <div className="event-date text-sm mt-1">
+                                                    Publised on:
+                                                    <p className=" text-xs font-bold bg-neutral text-primary inline-block px-2 rounded-md">
+                                                        {
+                                                            research?.publicationDate
+                                                        }
+                                                    </p>
+                                                </div>
+                                                <div className="event-des mt-3">
+                                                    <p className="mb-3 text-[16px] sm:text-sm text-justify font-medium text-black">
+                                                        <span className="font-bold text-primary whitespace-pre-line">
+                                                            Overview:
+                                                        </span>
+                                                        {research?.overview}
+                                                    </p>
+                                                    <p className=" text-[16px] sm:text-sm text-justify font-medium text-black">
+                                                        With participation from
+                                                        renowned companies and
+                                                        organizations, students
+                                                        have the chance to
+                                                        explore diverse career
+                                                        options and make
+                                                        meaningful connections
+                                                        that can shape their
+                                                        future professional
+                                                        endeavors.
+                                                    </p>
+                                                </div>
+                                                <div className="research-link mt-3">
+                                                    <Link
+                                                        to={research?.paperLink}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-primary text-xs inline-block bg-accent font-semibold px-4 py-1 rounded-sm"
+                                                    >
+                                                        View Publication
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        )
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -533,103 +483,23 @@ const MyCollegePage = () => {
                             </div>
                             <div className="collapse-content option-content bg-[#ececec]">
                                 <div className="pt-4">
-                                    {/* Type-1:soccar */}
-                                    <div className="add-deadline mt-8">
-                                        <div className="flex justify-start items-center">
-                                            <div className="inline-block bg-accent text-primary text-sm font-bold capitalize px-3 py-[2px] rounded-sm">
-                                                Type-1
+                                    {college?.sports?.map((sport, i) => (
+                                        <div className="add-deadline mt-8">
+                                            <div className="flex justify-start items-center">
+                                                <div className="inline-block bg-accent text-primary text-sm font-bold capitalize px-3 py-[2px] rounded-sm">
+                                                    {`Type-${i + 1}`}
+                                                </div>
+                                                <h3 className="text-base font-bold ml-3 text-secondary">
+                                                    {sport?.title}
+                                                </h3>
                                             </div>
-                                            <h3 className="text-base font-bold ml-3 text-secondary">
-                                                Soccer
-                                            </h3>
-                                        </div>
-                                        <div className="mt-3 pl-1">
-                                            <p className="text-[16px] text-justify font-medium text-[#393939]">
-                                                Soccer enthusiasts at Evergreen
-                                                University can participate in
-                                                intramural and club soccer
-                                                leagues, as well as compete at
-                                                the intercollegiate level. The
-                                                university's soccer teams
-                                                showcase their skills and
-                                                teamwork on the field,
-                                                representing Evergreen with
-                                                pride and sportsmanship.
-                                            </p>
-                                            <p className="text-[16px] text-justify font-medium text-[#393939] mt-2">
-                                                Whether you're a seasoned player
-                                                or a beginner, there are
-                                                opportunities for students of
-                                                all skill levels to join the
-                                                soccer community at Evergreen.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* Type-2:Swimming */}
-                                    <div className="add-deadline mt-8">
-                                        <div className="flex justify-start items-center">
-                                            <div className="inline-block bg-accent text-primary text-sm font-bold capitalize px-3 py-[2px] rounded-sm">
-                                                Type-2
+                                            <div className="mt-3 pl-1">
+                                                <p className="text-[16px] text-justify font-medium text-[#393939] whitespace-pre-line">
+                                                    {sport?.description}
+                                                </p>
                                             </div>
-                                            <h3 className="text-base font-bold ml-3 text-secondary">
-                                                Swimming
-                                            </h3>
                                         </div>
-                                        <div className="mt-3 pl-1">
-                                            <p className="text-[16px] text-justify font-medium text-[#393939]">
-                                                Evergreen University boasts
-                                                outstanding swimming facilities,
-                                                including Olympic-sized pools
-                                                and state-of-the-art training
-                                                equipment. Students interested
-                                                in swimming can participate in
-                                                recreational swimming sessions,
-                                                swim meets, and aquatic fitness
-                                                classes offered at the
-                                                university's aquatic center.
-                                            </p>
-                                            <p className="text-[16px] text-justify font-medium text-[#393939] mt-2">
-                                                Evergreen's swimming teams are
-                                                known for their dedication,
-                                                discipline, and competitive
-                                                spirit, consistently achieving
-                                                success in regional and national
-                                                competitions.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {/* Type-3:Cricket */}
-                                    <div className="add-deadline mt-8">
-                                        <div className="flex justify-start items-center">
-                                            <div className="inline-block bg-accent text-primary text-sm font-bold capitalize px-3 py-[2px] rounded-sm">
-                                                Type-3
-                                            </div>
-                                            <h3 className="text-base font-bold ml-3 text-secondary">
-                                                Cricket
-                                            </h3>
-                                        </div>
-                                        <div className="mt-3 pl-1">
-                                            <p className="text-[16px] text-justify font-medium text-[#393939]">
-                                                Evergreen University recognizes
-                                                the global popularity of cricket
-                                                and offers opportunities for
-                                                students to participate in this
-                                                dynamic sport. Whether you're a
-                                                seasoned cricketer or new to the
-                                                game, Evergreen provides
-                                                facilities for cricket practice
-                                                and competition.
-                                            </p>
-                                            <p className="text-[16px] text-justify font-medium text-[#393939] mt-2">
-                                                The university's cricket teams
-                                                compete in intercollegiate
-                                                matches, showcasing their skills
-                                                in batting, bowling, and
-                                                fielding while fostering
-                                                teamwork and camaraderie.
-                                            </p>
-                                        </div>
-                                    </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -641,7 +511,10 @@ const MyCollegePage = () => {
                         Add Review
                     </h5>
 
-                    <form>
+                    <form
+                        onSubmit={handleSubmit(reviewSubmitHandler)}
+                        autoComplete="off"
+                    >
                         <label className="form-control">
                             <div className="label">
                                 <span className="label-text">
@@ -650,11 +523,23 @@ const MyCollegePage = () => {
                             </div>
                             <textarea
                                 className="textarea textarea-bordered h-24 rounded-sm"
-                                placeholder="Bio"
+                                placeholder="Write your review here..."
+                                defaultValue={commentData?.result?.comment}
+                                {...register("comment", {
+                                    required: {
+                                        value: true,
+                                        message: "Add a comment first",
+                                    },
+                                })}
                             ></textarea>
-                            {/* <div className="label">
-                                <span className="label-text-alt">Your bio</span>
-                            </div> */}
+
+                            {errors?.comment && (
+                                <div className="label">
+                                    <span className="label-text-alt font-semibold text-red-600 text-xs">
+                                        {errors?.comment?.message}
+                                    </span>
+                                </div>
+                            )}
                         </label>
 
                         {/* Rating value row */}
@@ -681,7 +566,11 @@ const MyCollegePage = () => {
                             type="submit"
                             className=" text-sm font-semibold rounded-sm px-6 py-1 capitalize bg-secondary text-white transition-all duration-300 hover:bg-primary hover:text-white mt-4"
                         >
-                            submit
+                            {isLoading
+                                ? "Loading..."
+                                : isShowUpdateBtn
+                                ? "Update"
+                                : "submit"}
                         </button>
                     </form>
                 </div>
