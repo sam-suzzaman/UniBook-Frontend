@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // import required modules
 import { FreeMode, Autoplay } from "swiper/modules";
 
-const CollegeReviews = () => {
+const CollegeReviews = ({ reviews }) => {
     return (
         <div className="mt-8">
             <Swiper
@@ -36,18 +36,11 @@ const CollegeReviews = () => {
                     },
                 }}
             >
-                <SwiperSlide>
-                    <ReviewCard />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <ReviewCard />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <ReviewCard />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <ReviewCard />
-                </SwiperSlide>
+                {reviews?.map((review) => (
+                    <SwiperSlide>
+                        <ReviewCard review={review} key={review._id} />
+                    </SwiperSlide>
+                ))}
             </Swiper>
         </div>
     );

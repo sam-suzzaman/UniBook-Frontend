@@ -12,9 +12,7 @@ const ErrorPage = () => {
                     <div className="error text-red-600">
                         4<span className="text-red-400">0</span>4
                     </div>
-                    <div className="page">
-                        Ooops!!! The page you are looking for is not found
-                    </div>
+                    <div className="page">something went to wrong</div>
                     <Link to="/" className="back-home" href="#!">
                         Back to home
                     </Link>
@@ -28,7 +26,9 @@ const ErrorPage = () => {
                 <div className="error text-red-600">
                     O<span className="text-red-400">pp</span>s
                 </div>
-                <div className="page">Something went to wrong</div>
+                <div className="page">
+                    Ooops!!! The page you are looking for is not found
+                </div>
                 <Link className="back-home" to="/">
                     back to previous
                 </Link>

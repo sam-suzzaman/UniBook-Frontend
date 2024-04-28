@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
 import SearchModal from "./SearchModal";
@@ -55,6 +55,7 @@ const Navbar = () => {
             </NavLink>
         </li>
     ));
+
     return (
         <div className="bg-base-100 shadow-sm border-b-2 border-gray-100 flex justify-center items-center">
             <div className="navbar w-full max-w-[1200px]">
@@ -109,10 +110,11 @@ const Navbar = () => {
                 <div className="navbar-end">
                     {/* Search button */}
                     <button
-                        className="btn btn-ghost btn-circle"
                         onClick={() =>
                             document.getElementById("SearchModal").showModal()
                         }
+                        htmlFor="SearchModal"
+                        className="btn btn-ghost btn-circle"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -130,6 +132,7 @@ const Navbar = () => {
                         </svg>
                     </button>
                     {/* Search Modal */}
+
                     <SearchModal />
 
                     {/* Profile button */}

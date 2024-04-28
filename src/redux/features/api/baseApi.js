@@ -17,6 +17,9 @@ const baseApi = createApi({
         getLimitedCollege: builder.query({
             query: () => "/college?limit=3",
         }),
+        getSearchedCollege: builder.query({
+            query: (search) => `/college?search=${search}`,
+        }),
         getSingleCollege: builder.query({
             query: (id) => `/college/${id}`,
         }),
@@ -69,6 +72,10 @@ const baseApi = createApi({
             }),
             invalidatesTags: ["singleReview"],
         }),
+        getAllReviews: builder.query({
+            credentials: "include",
+            query: () => "/review",
+        }),
         getSingleReview: builder.query({
             credentials: "include",
             query: ({ userID, collegeID }) => `/review/${userID}/${collegeID}`,
@@ -80,6 +87,7 @@ const baseApi = createApi({
 export const {
     useGetAllCollegeQuery,
     useGetLimitedCollegeQuery,
+    useGetSearchedCollegeQuery,
     useGetSingleCollegeQuery,
     useGetGraduatesQuery,
     useAdmistUserMutation,
@@ -89,5 +97,6 @@ export const {
     useGetAdmittedCollegeQuery,
     useAddReviewMutation,
     useGetSingleReviewQuery,
+    useGetAllReviewsQuery,
 } = baseApi;
 export default baseApi;

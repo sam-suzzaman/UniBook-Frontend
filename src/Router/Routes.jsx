@@ -16,6 +16,7 @@ import {
     MyCollegePage,
     PasswordResetPage,
     ErrorPage,
+    SearchResultPage,
 } from "../pages";
 import PrivateRoute from "../Layout/PrivateRoute";
 import Demo from "../pages/Demo";
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             {
                 path: "college",
                 element: <CollegePage />,
+            },
+            {
+                path: "search",
+                element: <SearchResultPage />,
             },
             {
                 path: "college/:id",

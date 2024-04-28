@@ -8,6 +8,7 @@ import {
     SectionTitle,
 } from "../components";
 import {
+    useGetAllReviewsQuery,
     useGetGraduatesQuery,
     useGetLimitedCollegeQuery,
 } from "../redux/features/api/baseApi";
@@ -26,6 +27,12 @@ const HomePage = () => {
         isError: gIsError,
         error: gError,
     } = useGetGraduatesQuery();
+    const {
+        data: reviews,
+        isLoading: reviewLoading,
+        isError: reviewIsError,
+        error: reviewError,
+    } = useGetAllReviewsQuery();
 
     return (
         <>
@@ -53,9 +60,13 @@ const HomePage = () => {
             {/* Section: Our Graduates */}
             <div className="w-full max-w-[1400px] mx-auto max-[1399px]:px-6 py-10">
                 <SectionTitle title="Our Graduates" />
-                <div>
+                {spotlightLoading ? (
+                    <div className="mt-12 flex justify-center">
+                        <Loading />
+                    </div>
+                ) : (
                     <GraduatesGallery graduates={graduates?.result} />
-                </div>
+                )}
             </div>
 
             {/* Section: Recomended Papers */}
@@ -71,7 +82,13 @@ const HomePage = () => {
             {/* Section: Reviews */}
             <div className="w-full max-w-[1400px] mx-auto max-[1399px]:px-6 py-10">
                 <SectionTitle title="College Reviews" />
-                <CollegeReviews />
+                {reviewLoading ? (
+                    <div className="mt-12 flex justify-center">
+                        <Loading />
+                    </div>
+                ) : (
+                    <CollegeReviews reviews={reviews?.result} />
+                )}
             </div>
         </>
     );
