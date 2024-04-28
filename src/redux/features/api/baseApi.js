@@ -6,7 +6,7 @@ const baseApi = createApi({
     // set Endpoints
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://localhost:1111/api/v1",
+        baseUrl: "https://uni-book.vercel.app/api/v1",
         credentials: "include",
     }),
 
