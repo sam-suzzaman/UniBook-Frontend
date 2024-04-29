@@ -9,7 +9,7 @@ import { userRegistrationThunk } from "../../redux/features/UserSlice";
 const RegisterForm = ({ setShowWhichForm }) => {
     const [isShowPassowrd, setIsShowPassword] = useState(false);
 
-    const { email } = useSelector((state) => state.userSlice);
+    const { email, isLoading } = useSelector((state) => state.userSlice);
     const dispatch = useDispatch();
 
     const {

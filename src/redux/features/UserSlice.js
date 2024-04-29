@@ -21,7 +21,8 @@ const initialState = localStorage.getItem("userInfo")
 export const googleLoginThunk = createAsyncThunk(
     "UserSlice/googleLogin",
     async (provider) => {
-        const URL = "http://localhost:1111/api/v1/auth/login/social";
+        // const URL = "http://localhost:1111/api/v1/auth/login/social";
+        const URL = "https://uni-book.vercel.app/api/v1/auth/login/social";
         const data = await signInWithPopup(firebaseAuth, provider);
         const tempUser = {
             username: data?.user?.displayName,
@@ -46,7 +47,8 @@ export const googleLoginThunk = createAsyncThunk(
 export const userRegistrationThunk = createAsyncThunk(
     "UserSlice/userRegister",
     async ({ userObject, reset }) => {
-        const URL = "http://localhost:1111/api/v1/auth/register";
+        const URL = "https://uni-book.vercel.app/api/v1/auth/register";
+        // const URL = "http://localhost:1111/api/v1/auth/register";
 
         const response = await getUserHandler(URL, userObject);
 
@@ -87,7 +89,8 @@ export const userRegistrationThunk = createAsyncThunk(
 export const userLoginThunk = createAsyncThunk(
     "UserSlice/userLogin",
     async ({ userObject, reset }) => {
-        const URL = "http://localhost:1111/api/v1/auth/login";
+        // const URL = "http://localhost:1111/api/v1/auth/login";
+        const URL = "https://uni-book.vercel.app/api/v1/auth/login";
 
         const response = await getUserHandler(URL, userObject);
 
@@ -131,10 +134,10 @@ const getUserHandler = async (url, userData) => {
     try {
         const response = await fetch(url, options);
         const data = await response.json();
-
         return data;
     } catch (error) {
-        console.log("google login issue:", error);
+        console.log(error);
+        console.log("login issue:", error.message);
     }
 };
 

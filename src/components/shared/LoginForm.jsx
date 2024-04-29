@@ -123,6 +123,7 @@ const LoginForm = ({ setShowWhichForm }) => {
                 </div>
                 <div className="btn-row">
                     <button className="auth-btn" type="submit">
+                        {/* {isLoading ? "loading..." : "login"} */}
                         login
                     </button>
                 </div>
