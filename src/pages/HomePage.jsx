@@ -34,6 +34,9 @@ const HomePage = () => {
         error: reviewError,
     } = useGetAllReviewsQuery();
 
+    if (isError) {
+        console.log(error);
+    }
     return (
         <>
             {/* Section: Campus Spotlight */}
