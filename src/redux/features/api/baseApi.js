@@ -8,6 +8,7 @@ const baseApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: "https://uni-book.vercel.app/api/v1",
         credentials: "include",
+        mode: "no-cors",
     }),
 
     endpoints: (builder) => ({
