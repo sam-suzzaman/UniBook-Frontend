@@ -22,12 +22,13 @@ export const googleLoginThunk = createAsyncThunk(
     "UserSlice/googleLogin",
     async (provider) => {
         // const URL = "http://localhost:1111/api/v1/auth/login/social";
-        const URL = "https://uni-book.vercel.app/api/v1/auth/login/social";
+        const URL = "https://uni-book.vercel.app/api/v1/auth/social-login";
         const data = await signInWithPopup(firebaseAuth, provider);
         const tempUser = {
             username: data?.user?.displayName,
             email: data?.user?.email,
         };
+        console.log(tempUser);
 
         const response = await getUserHandler(URL, tempUser);
         // const user = {
