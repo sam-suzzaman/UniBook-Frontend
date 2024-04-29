@@ -6,6 +6,7 @@ import { FaRegUser } from "react-icons/fa";
 import { LuSchool } from "react-icons/lu";
 
 import avatar from "../../assets/avatar.jpeg";
+import { useSelector } from "react-redux";
 
 const sidebarData = [
     { id: 1, name: "profile", icon: <FaRegUser />, path: "." },
@@ -18,6 +19,7 @@ const sidebarData = [
 ];
 
 const DashboardSidebar = () => {
+    const { username, email } = useSelector((state) => state.userSlice);
     return (
         <Wrapper>
             <div className="profile px-4 ">
@@ -27,10 +29,10 @@ const DashboardSidebar = () => {
                     alt="avatar"
                 />
                 <h5 className="font-semibold text-[14px] text-center mt-2 text-ellipsis overflow-hidden">
-                    Robert Dowery
+                    {username}
                 </h5>
                 <h6 className="font-semibold text-[12px] text-center text-ellipsis overflow-hidden text-gray-700">
-                    demodemodemodemodemo@gmail.com
+                    {email}
                 </h6>
             </div>
             <div className="d-sidemenu">
