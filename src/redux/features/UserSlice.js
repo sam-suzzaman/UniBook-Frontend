@@ -30,17 +30,41 @@ export const googleLoginThunk = createAsyncThunk(
         };
 
         const response = await getUserHandler(URL, tempUser);
-        const user = {
-            username: response?.result?.username,
-            email: response?.result?.email,
-            id: response?.result?._id,
-            isAdmitted: response?.result?.isAdmitted,
-            department: response?.result?.department,
-            address: response?.result?.address,
-            contact: response?.result?.contact,
-        };
+        // const user = {
+        //     username: response?.result?.username,
+        //     email: response?.result?.email,
+        //     id: response?.result?._id,
+        //     isAdmitted: response?.result?.isAdmitted,
+        //     department: response?.result?.department,
+        //     address: response?.result?.address,
+        //     contact: response?.result?.contact,
+        // };
+        if (response.status) {
+            const user = {
+                username: response?.result?.username,
+                email: response?.result?.email,
+                id: response?.result?._id,
+                isAdmitted: response?.result?.isAdmitted,
+                department: response?.result?.department,
+                address: response?.result?.address,
+                contact: response?.result?.contact,
+            };
+            Swal.fire({
+                icon: "success",
+                title: "Done...",
+                text: "Successfully login",
+            });
+            return user;
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: response.message,
+                text: response.result,
+            });
+            throw new Error("registration failed");
+        }
 
-        return user;
+        // return user;
     }
 );
 
